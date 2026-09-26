@@ -45,7 +45,7 @@ with col1:
         y=THRESHOLD, line_dash="dash", line_color="orange",
         annotation_text="Reporting threshold (10,000 gal)"
     )
-    fig_actual.update_layout(xaxis_title="Date", yaxis_title="Gallons", height=500)
+    fig_actual.update_layout(xaxis_title="Date", yaxis_title="Gallons", height=1000)
     st.plotly_chart(fig_actual, use_container_width=True)
 
 # ---- Chart 2: Forecast line + threshold (no band) ----
