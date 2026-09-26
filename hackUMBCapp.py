@@ -32,57 +32,77 @@ selected_date = st.slider(
 
 visible = forecast[forecast['ds'] <= selected_date]
 
-col1, col2, col3 = st.columns(3)
 
-# ---- Chart 1: Actual + threshold ----
-with col1:
+def add_threshold(fig):
+    fig.add_hline(
+        y=THRESHOLD, line_dash="dash", line_color="orange",
+        annotation_text="Reporting threshold (10,000 gal)"
+    )
+    fig.update_layout(xaxis_title="Date", yaxis_title="Gallons", height=550)
+    return fig
+
+
+tab_actual, tab_forecast, tab_upper, tab_lower, tab_all = st.tabs(
+    ["Actual", "Forecast (yhat)", "Upper Bound", "Lower Bound", "All Combined"]
+)
+
+with tab_actual:
     st.subheader("Actual Discharge Volume")
-    fig_actual = go.Figure()
-    fig_actual.add_trace(go.Scatter(
+    fig = go.Figure()
+    fig.add_trace(go.Scatter(
         x=visible['ds'], y=visible['actual_gallons'],
         mode='markers', name='Actual', marker=dict(size=4, color='#4B6EF5')
     ))
-    fig_actual.add_hline(
-        y=THRESHOLD, line_dash="dash", line_color="orange",
-        annotation_text="Reporting threshold (10,000 gal)"
-    )
-    fig_actual.update_layout(xaxis_title="Date", yaxis_title="Gallons", height=1000)
-    st.plotly_chart(fig_actual, use_container_width=True)
+    st.plotly_chart(add_threshold(fig), use_container_width=True)
 
-# ---- Chart 2: Forecast line + threshold (no band) ----
-with col2:
-    st.subheader("Forecast")
-    fig_forecast = go.Figure()
-    fig_forecast.add_trace(go.Scatter(
+with tab_forecast:
+    st.subheader("Forecast (yhat_gallons)")
+    fig = go.Figure()
+    fig.add_trace(go.Scatter(
         x=visible['ds'], y=visible['yhat_gallons'],
         mode='lines', name='Forecast', line=dict(color='red')
     ))
-    fig_forecast.add_hline(
-        y=THRESHOLD, line_dash="dash", line_color="orange",
-        annotation_text="Reporting threshold (10,000 gal)"
-    )
-    fig_forecast.update_layout(xaxis_title="Date", yaxis_title="Gallons", height=500)
-    st.plotly_chart(fig_forecast, use_container_width=True)
+    st.plotly_chart(add_threshold(fig), use_container_width=True)
 
-# ---- Chart 3: Confidence band on its own + threshold ----
-with col3:
-    st.subheader("Confidence Band")
-    fig_conf = go.Figure()
-    fig_conf.add_trace(go.Scatter(
+with tab_upper:
+    st.subheader("Upper Bound (yhat_upper_gallons)")
+    fig = go.Figure()
+    fig.add_trace(go.Scatter(
         x=visible['ds'], y=visible['yhat_upper_gallons'],
-        mode='lines', name='Upper bound', line=dict(width=0), showlegend=False
+        mode='lines', name='Upper bound', line=dict(color='#B98CFF')
     ))
-    fig_conf.add_trace(go.Scatter(
+    st.plotly_chart(add_threshold(fig), use_container_width=True)
+
+with tab_lower:
+    st.subheader("Lower Bound (yhat_lower_gallons)")
+    fig = go.Figure()
+    fig.add_trace(go.Scatter(
         x=visible['ds'], y=visible['yhat_lower_gallons'],
-        mode='lines', name='Confidence band', line=dict(width=0), fill='tonexty',
-        fillcolor='rgba(150,100,255,0.4)'
+        mode='lines', name='Lower bound', line=dict(color='#6FCF97')
     ))
-    fig_conf.add_hline(
-        y=THRESHOLD, line_dash="dash", line_color="orange",
-        annotation_text="Reporting threshold (10,000 gal)"
-    )
-    fig_conf.update_layout(xaxis_title="Date", yaxis_title="Gallons", height=500)
-    st.plotly_chart(fig_conf, use_container_width=True)
+    st.plotly_chart(add_threshold(fig), use_container_width=True)
+
+with tab_all:
+    st.subheader("All Series Combined")
+    fig = go.Figure()
+    fig.add_trace(go.Scatter(
+        x=visible['ds'], y=visible['actual_gallons'],
+        mode='markers', name='Actual', marker=dict(size=4, color='#4B6EF5')
+    ))
+    fig.add_trace(go.Scatter(
+        x=visible['ds'], y=visible['yhat_upper_gallons'],
+        mode='lines', line=dict(width=0), showlegend=False
+    ))
+    fig.add_trace(go.Scatter(
+        x=visible['ds'], y=visible['yhat_lower_gallons'],
+        mode='lines', line=dict(width=0), fill='tonexty',
+        name='Confidence band', fillcolor='rgba(150,100,255,0.3)'
+    ))
+    fig.add_trace(go.Scatter(
+        x=visible['ds'], y=visible['yhat_gallons'],
+        mode='lines', name='Forecast', line=dict(color='red')
+    ))
+    st.plotly_chart(add_threshold(fig), use_container_width=True)
 
 # ---- Status readout ----
 current_val = visible['yhat_gallons'].iloc[-1] if len(visible) else 0
