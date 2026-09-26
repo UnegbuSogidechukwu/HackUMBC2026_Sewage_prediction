@@ -12,9 +12,13 @@ def load_data():
 forecast = load_data()
 
 st.title("Maryland Sewage Discharge — Trend & Forecast")
-st.caption("Threshold based on MDE penalty guidance / State Implementation Plan reference level")
+st.caption(
+    "Threshold: 10,000 gallons — Maryland's public-reporting trigger for sanitary sewer "
+    "overflows under COMAR 26.08.10 (Clean Water Act / MDE water-quality regulation, "
+    "not a Clean Air Act State Implementation Plan)."
+)
 
-THRESHOLD = 5_000_000  # replace with your actual justified number
+THRESHOLD = 10_000  # gallons — COMAR 26.08.10 public reporting trigger
 
 min_date, max_date = forecast['ds'].min(), forecast['ds'].max()
 selected_date = st.slider(
@@ -27,18 +31,50 @@ selected_date = st.slider(
 
 visible = forecast[forecast['ds'] <= selected_date]
 
-fig = go.Figure()
-fig.add_trace(go.Scatter(x=visible['ds'], y=visible['actual_gallons'], mode='markers', name='Actual', marker=dict(size=4)))
-fig.add_trace(go.Scatter(x=visible['ds'], y=visible['yhat_gallons'], mode='lines', name='Forecast', line=dict(color='red')))
-fig.add_trace(go.Scatter(x=visible['ds'], y=visible['yhat_upper_gallons'], mode='lines', line=dict(width=0), showlegend=False))
-fig.add_trace(go.Scatter(x=visible['ds'], y=visible['yhat_lower_gallons'], mode='lines', line=dict(width=0), fill='tonexty', name='Confidence band', fillcolor='rgba(150,100,255,0.3)'))
-fig.add_hline(y=THRESHOLD, line_dash="dash", line_color="orange", annotation_text="Threshold")
+col1, col2 = st.columns(2)
 
-fig.update_layout(xaxis_title="Date", yaxis_title="Gallons", height=550)
-st.plotly_chart(fig, use_container_width=True)
+# ---- Chart 1: Actual + threshold ----
+with col1:
+    st.subheader("Actual Discharge Volume")
+    fig_actual = go.Figure()
+    fig_actual.add_trace(go.Scatter(
+        x=visible['ds'], y=visible['actual_gallons'],
+        mode='markers', name='Actual', marker=dict(size=4, color='#4B6EF5')
+    ))
+    fig_actual.add_hline(
+        y=THRESHOLD, line_dash="dash", line_color="orange",
+        annotation_text="Reporting threshold (10,000 gal)"
+    )
+    fig_actual.update_layout(xaxis_title="Date", yaxis_title="Gallons", height=500)
+    st.plotly_chart(fig_actual, use_container_width=True)
 
+# ---- Chart 2: Forecast + confidence band + threshold ----
+with col2:
+    st.subheader("Forecast")
+    fig_forecast = go.Figure()
+    fig_forecast.add_trace(go.Scatter(
+        x=visible['ds'], y=visible['yhat_upper_gallons'],
+        mode='lines', line=dict(width=0), showlegend=False
+    ))
+    fig_forecast.add_trace(go.Scatter(
+        x=visible['ds'], y=visible['yhat_lower_gallons'],
+        mode='lines', line=dict(width=0), fill='tonexty',
+        name='Confidence band', fillcolor='rgba(150,100,255,0.3)'
+    ))
+    fig_forecast.add_trace(go.Scatter(
+        x=visible['ds'], y=visible['yhat_gallons'],
+        mode='lines', name='Forecast', line=dict(color='red')
+    ))
+    fig_forecast.add_hline(
+        y=THRESHOLD, line_dash="dash", line_color="orange",
+        annotation_text="Reporting threshold (10,000 gal)"
+    )
+    fig_forecast.update_layout(xaxis_title="Date", yaxis_title="Gallons", height=500)
+    st.plotly_chart(fig_forecast, use_container_width=True)
+
+# ---- Status readout ----
 current_val = visible['yhat_gallons'].iloc[-1] if len(visible) else 0
 if current_val > THRESHOLD:
-    st.error(f"Forecasted discharge ({current_val:,.0f} gal) exceeds threshold")
+    st.error(f"Forecasted discharge ({current_val:,.0f} gal) exceeds the 10,000-gallon reporting threshold")
 else:
-    st.success(f"Forecasted discharge ({current_val:,.0f} gal) is within threshold")
+    st.success(f"Forecasted discharge ({current_val:,.0f} gal) is within the 10,000-gallon reporting threshold")
