@@ -31,7 +31,7 @@ selected_date = st.slider(
 
 visible = forecast[forecast['ds'] <= selected_date]
 
-col1, col2 = st.columns(2)
+col1, col2, col3 = st.columns(3)
 
 # ---- Chart 1: Actual + threshold ----
 with col1:
@@ -48,19 +48,10 @@ with col1:
     fig_actual.update_layout(xaxis_title="Date", yaxis_title="Gallons", height=500)
     st.plotly_chart(fig_actual, use_container_width=True)
 
-# ---- Chart 2: Forecast + confidence band + threshold ----
+# ---- Chart 2: Forecast line + threshold (no band) ----
 with col2:
     st.subheader("Forecast")
     fig_forecast = go.Figure()
-    fig_forecast.add_trace(go.Scatter(
-        x=visible['ds'], y=visible['yhat_upper_gallons'],
-        mode='lines', line=dict(width=0), showlegend=False
-    ))
-    fig_forecast.add_trace(go.Scatter(
-        x=visible['ds'], y=visible['yhat_lower_gallons'],
-        mode='lines', line=dict(width=0), fill='tonexty',
-        name='Confidence band', fillcolor='rgba(150,100,255,0.3)'
-    ))
     fig_forecast.add_trace(go.Scatter(
         x=visible['ds'], y=visible['yhat_gallons'],
         mode='lines', name='Forecast', line=dict(color='red')
@@ -71,6 +62,26 @@ with col2:
     )
     fig_forecast.update_layout(xaxis_title="Date", yaxis_title="Gallons", height=500)
     st.plotly_chart(fig_forecast, use_container_width=True)
+
+# ---- Chart 3: Confidence band on its own + threshold ----
+with col3:
+    st.subheader("Confidence Band")
+    fig_conf = go.Figure()
+    fig_conf.add_trace(go.Scatter(
+        x=visible['ds'], y=visible['yhat_upper_gallons'],
+        mode='lines', name='Upper bound', line=dict(width=0), showlegend=False
+    ))
+    fig_conf.add_trace(go.Scatter(
+        x=visible['ds'], y=visible['yhat_lower_gallons'],
+        mode='lines', name='Confidence band', line=dict(width=0), fill='tonexty',
+        fillcolor='rgba(150,100,255,0.4)'
+    ))
+    fig_conf.add_hline(
+        y=THRESHOLD, line_dash="dash", line_color="orange",
+        annotation_text="Reporting threshold (10,000 gal)"
+    )
+    fig_conf.update_layout(xaxis_title="Date", yaxis_title="Gallons", height=500)
+    st.plotly_chart(fig_conf, use_container_width=True)
 
 # ---- Status readout ----
 current_val = visible['yhat_gallons'].iloc[-1] if len(visible) else 0
