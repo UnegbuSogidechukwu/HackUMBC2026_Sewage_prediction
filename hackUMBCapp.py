@@ -1,4 +1,3 @@
-
 import streamlit as st
 import pandas as pd
 import plotly.graph_objects as go
@@ -13,8 +12,9 @@ def load_data():
 forecast = load_data()
 
 st.title("Maryland Sewage Discharge — Trend & Forecast")
+st.caption("Threshold based on MDE penalty guidance / State Implementation Plan reference level")
 
-THRESHOLD = 5_000_000  # replace with your actual justified threshold in gallons
+THRESHOLD = 5_000_000  # replace with your actual justified number
 
 min_date, max_date = forecast['ds'].min(), forecast['ds'].max()
 selected_date = st.slider(
