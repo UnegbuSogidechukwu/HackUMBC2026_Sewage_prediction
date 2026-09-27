@@ -6,74 +6,60 @@ import base64
 st.set_page_config(page_title="Maryland Sewage Discharge Forecast", layout="wide")
 
 
-@st.cache(allow_output_mutation=True)
-def get_base64_of_bin_file(bin_file):
-    with open(bin_file, 'rb') as f:
-        data = f.read()
-    return base64.b64encode(data).decode()
+@st.cache_data
+def get_base64(bin_file):
+    with open(bin_file, "rb") as f:
+        return base64.b64encode(f.read()).decode()
 
-def set_png_as_page_bg(png_file):
-    bin_str = get_base64_of_bin_file(png_file)
-    page_bg_img = '''
-    <style>
-    body {
-    background-image: url("data:image/png;base64,%s");
-    background-size: cover;
-    }
-    </style>
-    ''' % bin_str
-    
-    st.markdown(page_bg_img, unsafe_allow_html=True)
-    return
+img_base64 = get_base64("hackumbc_background.webp")
 
-set_png_as_page_bg('background.png')
-# page styling
 st.markdown(
+    f"""
     <style>
-        /* Background-image */
-        .stApp {
-            background-image: url("data:image/jpg;base64,{img_base64};
+        .stApp {{
+            background-image: url("data:image/webp;base64,{img_base64}");
             background-size: cover;
-            background-position: center:
-            background-attachment:fixed;
-        }
-        /* Header section */
-        .header {
+            background-position: center;
+            background-attachment: fixed;
+        }}
+
+        .header {{
             background: linear-gradient(90deg, #166534, #15803d);
             padding: 30px;
             border-radius: 15px;
             color: white;
             margin-bottom: 20px;
-        }
-        /* Content container */
-        .content-box {
+        }}
+
+        .content-box {{
             background-color: rgba(255,255,255,0.92);
             padding: 20px;
             border-radius: 15px;
             box-shadow: 0 4px 12px rgba(0,0,0,0.1);
-        }
-        /* Tabs styling */
-        button[data-baseweb="tab] {
+        }}
+
+        button[data-baseweb="tab"] {{
             font-size: 16px;
-            font-weight: 600; 
+            font-weight: 600;
             border-radius: 8px;
-        }
-        button[data-baseweb="tab"][aria-selected="true"] {
+        }}
+
+        button[data-baseweb="tab"][aria-selected="true"] {{
             background-color: #166534;
-            color:white;
-        }
-        /* Status message */
-        .status-success {
+            color: white;
+        }}
+
+        .status-success {{
             background-color: #E8F5E9;
             color: #14532D;
             padding: 15px;
             border-radius: 8px;
             border-left: 5px solid #15883D;
-        }
+        }}
     </style>
-    unsafe_allow_html = True
+    """,
+    unsafe_allow_html=True
 )
-            
 
 
 @st.cache_data
