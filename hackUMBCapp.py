@@ -19,7 +19,7 @@ actual = load_actual()
 
 # Merge the two sources into one dataframe, keyed on date.
 # how="outer" keeps every date from both files, even where only one has data.
-df = pd.merge(forecast, actual, on="ds", how="outer").sort_values("ds")
+# df = pd.merge(forecast, actual, on="ds", how="outer").sort_values("ds")
 
 st.title("Maryland Sewage Discharge — Trend & Forecast")
 st.caption(
