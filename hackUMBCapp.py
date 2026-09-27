@@ -333,7 +333,7 @@ with tab_info:
         "risks they pose to water quality. The Maryland Department of the Environment (MDE) regulatory threshold of 10,000 gallons, "
         "the state's public-reporting trigger for sanitary sewer overflows, serves as a key reference point for assessing current conditions and compliance. "
     )
-     st.info(
+    st.info(
         "**Why 10,000 gallons?** Under COMAR 26.08.10, any sanitary sewer overflow "
         "exceeding 10,000 gallons must be reported to the Maryland Department of the Environment (MDE). "
         "This threshold helps prioritize emergency response and track compliance with the Clean Water Act."
