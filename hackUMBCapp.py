@@ -324,13 +324,13 @@ with tab_info:
     st.markdown("---")
 
     # Section 1: Model 
-    st.markdown("📈 About the Forecast Model (Prophet)")
+    st.markdown("### 📈 About the Forecast Model (Prophet)")
     st.write(
         "The forecasts shown in this dashboard were generated using **Prophet**, an open-source "
         "forecasting procedure released by Facebook's Core Data Science team. Prophet is "
         "implemented in both R and Python and is available on CRAN and PyPI. It is designed to "
-        "handle time series data with strong seasonal effects, missing data, and outliers — all "
-        "common characteristics of environmental monitoring data.[reference:0]"
+        "handle time series data with strong seasonal effects, missing data, and outliers; all of ehich are "
+        "common characteristics of [environmental monitoring data](https://opendata.maryland.gov/Government/Reported-Sewer-Overflows-New-for-2023-/stgj-u72u/about_data)."
     )
     st.write(
         "The model decomposes a time series into three main components: **trend** (non-linear "
