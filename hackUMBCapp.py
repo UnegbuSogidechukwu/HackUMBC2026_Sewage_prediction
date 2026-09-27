@@ -1,4 +1,3 @@
-# change code to have upper and lower
 import streamlit as st
 import pandas as pd
 import plotly.graph_objects as go
@@ -10,7 +9,12 @@ def load_data():
     df = pd.read_csv('forecast.csv', parse_dates=['ds'])
     return df
 
+def load_actual():
+    da = pd.read_csv('actual.csv', parse_dates=['ds'])
+    return da
+
 forecast = load_data()
+actual = load_actual()
 
 st.title("Maryland Sewage Discharge — Trend & Forecast")
 st.caption(
@@ -19,7 +23,7 @@ st.caption(
     "not a Clean Air Act State Implementation Plan)."
 )
 
-THRESHOLD = 10_000  # gallons — COMAR 26.08.10 public reporting trigger
+THRESHOLD = 10_000  
 
 min_date, max_date = forecast['ds'].min(), forecast['ds'].max()
 selected_date = st.slider(
@@ -43,7 +47,7 @@ def add_threshold(fig):
 
 
 tab_actual, tab_forecast, tab_upper, tab_lower, tab_all = st.tabs(
-    ["Actual", "Forecast (yhat)", "Upper Bound", "Lower Bound", "All Combined"]
+    ["Actual", "Forecast", "Upper Bound", "Lower Bound", "Information"]
 )
 
 with tab_actual:
@@ -56,10 +60,10 @@ with tab_actual:
     st.plotly_chart(add_threshold(fig), use_container_width=True)
 
 with tab_forecast:
-    st.subheader("Forecast (yhat_gallons)")
+    st.subheader("Forecast")
     fig = go.Figure()
     fig.add_trace(go.Scatter(
-        x=visible['ds'], y=visible['yhat_gallons'],
+        x=visible['ds'], y=visible['forcasted gallons'],
         mode='lines', name='Forecast', line=dict(color='red')
     ))
     st.plotly_chart(add_threshold(fig), use_container_width=True)
@@ -82,27 +86,6 @@ with tab_lower:
     ))
     st.plotly_chart(add_threshold(fig), use_container_width=True)
 
-with tab_all:
-    st.subheader("All Series Combined")
-    fig = go.Figure()
-    fig.add_trace(go.Scatter(
-        x=visible['ds'], y=visible['actual_gallons'],
-        mode='markers', name='Actual', marker=dict(size=4, color='#4B6EF5')
-    ))
-    fig.add_trace(go.Scatter(
-        x=visible['ds'], y=visible['yhat_upper_gallons'],
-        mode='lines', line=dict(width=0), showlegend=False
-    ))
-    fig.add_trace(go.Scatter(
-        x=visible['ds'], y=visible['yhat_lower_gallons'],
-        mode='lines', line=dict(width=0), fill='tonexty',
-        name='Confidence band', fillcolor='rgba(150,100,255,0.3)'
-    ))
-    fig.add_trace(go.Scatter(
-        x=visible['ds'], y=visible['yhat_gallons'],
-        mode='lines', name='Forecast', line=dict(color='red')
-    ))
-    st.plotly_chart(add_threshold(fig), use_container_width=True)
 
 # ---- Status readout ----
 current_val = visible['yhat_gallons'].iloc[-1] if len(visible) else 0
