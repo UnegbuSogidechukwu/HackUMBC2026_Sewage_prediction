@@ -29,13 +29,7 @@ st.markdown(
             color: #1E293B !important;
         }
 
-
-        # /* Hide Streamlit Default Elements */
-        # #MainMenu {visibility: hidden;}
-        # footer {visibility: hidden;}
-        # header {visibility: hidden;}
-
-        /* ---------- Header Section ---------- */
+        /* Header Section */
         .header-container {
             background: linear-gradient(135deg, #ECFDF5 0%, #D1FAE5 50%, #A7F3D0 100%);
             padding: 36px 40px;
@@ -62,16 +56,16 @@ st.markdown(
             color: white;
         }
 
-        /* ---------- Clean Content Box ---------- */
-        .content-box,
-        [data-testid="stVerticalBlock"] > div:has(> .stPlotlyChart) {
-            background:#90EE90 !important;
-            padding: 24px 28px;
-            border-radius: 18px;
-            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.05);
-            border: 1px solid rgba(226, 232, 240, 0.8);
-            margin-bottom: 22px;
-        }
+        # /*  Clean Content Box */
+        # .content-box,
+        # [data-testid="stVerticalBlock"] > div:has(> .stPlotlyChart) {
+        #     background:#90EE90 !important;
+        #     padding: 24px 28px;
+        #     border-radius: 18px;
+        #     box-shadow: 0 4px 15px rgba(0, 0, 0, 0.05);
+        #     border: 1px solid rgba(226, 232, 240, 0.8);
+        #     margin-bottom: 22px;
+        # }
 
         /* ---------- Tab Styling (Pills) ---------- */
         .stTabs [data-baseweb="tab-list"] {
