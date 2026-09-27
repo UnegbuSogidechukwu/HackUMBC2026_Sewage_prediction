@@ -441,7 +441,6 @@ with tab_zip:
                     width: 60px;
                     text-align: center;
                     color: {bar_color};
-                ">{medal}</div>
                 <div style="flex: 1; padding-left: 16px;">
                     <div style="font-size: 18px; font-weight: 700; color: #14532D;">
                         Zipcode {zipcode}
