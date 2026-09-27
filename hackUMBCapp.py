@@ -462,6 +462,7 @@ for rank, (zipcode, volume) in enumerate(top_n.items(), start=1):
         """,
         unsafe_allow_html=True
     )
+    )
     # ── 5. Key metrics below the ranking ──
     st.markdown("---")
     col1, col2, col3 = st.columns(3)
