@@ -11,16 +11,15 @@ st.set_page_config(
     layout="wide"
 )
 
-# ─────────────────────────────────────────────────────────────
+
 # 2. GLOBAL CSS INJECTION (Modern Clean UI)
-# ─────────────────────────────────────────────────────────────
 st.markdown(
     """
     <style>
-        /* ---------- Import Google Font ---------- */
+        /* Import Google Font */
         @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700&display=swap');
 
-        /* ---------- Global Solid Background ---------- */
+        /* Global Solid Background */
         .stApp {
             background-color: #ADD8E6 ; 
             font-family: 'Inter', sans-serif;
@@ -31,10 +30,10 @@ st.markdown(
         }
 
 
-        /* ---------- Hide Streamlit Default Elements ---------- */
-        #MainMenu {visibility: hidden;}
-        footer {visibility: hidden;}
-        header {visibility: hidden;}
+        # /* Hide Streamlit Default Elements */
+        # #MainMenu {visibility: hidden;}
+        # footer {visibility: hidden;}
+        # header {visibility: hidden;}
 
         /* ---------- Header Section ---------- */
         .header-container {
