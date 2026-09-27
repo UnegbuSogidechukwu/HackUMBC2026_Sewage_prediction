@@ -255,6 +255,11 @@ tab_actual, tab_forecast, tab_upper, tab_lower, tab_info = st.tabs(
 with tab_actual:
     visible_actual = slider("actual", key="slider_actual")
     st.subheader("Actual Discharge Volume")
+    # Metrics
+    col1, col2, col3 = st.columns(3)
+    col1.metric("Total Discharges", f"{len(visible_actual):,}")
+    col2.metric("Peak Volume", f"{visible_actual['discharge_volume_clean'].max():,.0f} gal")
+    col3.metric("Average Volume", f"{visible_actual['discharge_volume_clean'].mean():,.0f} gal")
     fig = go.Figure()
     fig.add_trace(go.Scatter(
         x=visible_actual['ds'],
