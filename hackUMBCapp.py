@@ -165,23 +165,17 @@ st.markdown(
     unsafe_allow_html=True
 )
 
-st.caption(
-    "Threshold: 10,000 gallons — Maryland's public-reporting trigger for sanitary sewer "
-    "overflows under COMAR 26.08.10 (Clean Water Act / MDE water-quality regulation)."
-)
-
 THRESHOLD = 10_000  # gallons — COMAR 26.08.10 public reporting trigger
 
 # 5. HELPER FUNCTIONS (Sliders, Threshold Line)
-# 5. HELPER FUNCTIONS (Sliders, Threshold Line)
 def slider(source_type, key):
-    """
-    Render a date slider and return the filtered dataframe.
+    # """
+    # Render a date slider and return the filtered dataframe.
 
-    - source_type="actual"   → slider spans only actual dates, returns actual rows.
-    - source_type="forecast" → slider spans only FUTURE dates (after the last
-                               actual date), returns forecast rows.
-    """
+    # - source_type="actual"   → slider spans only actual dates, returns actual rows.
+    # - source_type="forecast" → slider spans only FUTURE dates (after the last
+    #                            actual date), returns forecast rows.
+    # """
     # Anchor: the last date we have real observations for
     last_actual_date = actual['ds'].max()
 
