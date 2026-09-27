@@ -311,19 +311,20 @@ with tab_lower:
     ))
     st.plotly_chart(add_threshold(fig), use_container_width=True)
 
-# ── Tab 5: Information ──
+# Tab 5: Information 
 with tab_info:
     st.subheader("ℹ️ About This Application")
     st.write(
         "This application is an interactive dashboard for exploring historical sewage discharge "
         "volumes in Maryland and viewing short-term forecasts. It is designed to help the public, "
         "researchers, and policymakers better understand patterns in wastewater overflows and the "
-        "risks they pose to water quality."
+        "risks they pose to water quality. The Maryland Department of the Environment (MDE) regulatory threshold of 10,000 gallons, "
+        "the state's public-reporting trigger for sanitary sewer overflows, serves as a key reference point for assessing current conditions and compliance. "
     )
     st.markdown("---")
 
-    # ── Section 1: Model ──
-    st.markdown("### 📈 About the Forecast Model (Prophet)")
+    # Section 1: Model 
+    st.markdown("📈 About the Forecast Model (Prophet)")
     st.write(
         "The forecasts shown in this dashboard were generated using **Prophet**, an open-source "
         "forecasting procedure released by Facebook's Core Data Science team. Prophet is "
