@@ -22,7 +22,7 @@ st.markdown(
 
         /* ---------- Global Solid Background ---------- */
         .stApp {
-            background-color: #0000FF; 
+            background-color: #00BFFF; 
             font-family: 'Inter', sans-serif;
         }
 
