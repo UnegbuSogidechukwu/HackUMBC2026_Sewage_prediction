@@ -112,28 +112,16 @@ st.markdown(
             margin-top: 12px;
         }
 
-        # .status-error {
-        #     background: linear-gradient(135deg, #FEE2E2, #FECACA);
-        #     color: #7F1D1D;
-        #     padding: 18px 24px;
-        #     border-radius: 14px;
-        #     border-left: 6px solid #DC2626;
-        #     font-weight: 600;
-        #     font-size: 15px;
-        #     box-shadow: 0 2px 10px rgba(220, 38, 38, 0.1);
-        #     margin-top: 12px;
-        # }
-
-        /* ---------- Slider Label ---------- */
+        /* Slider Label */
         .stSlider > label {
             font-size: 15px;
             font-weight: 600;
-            color: #14532D;
+            color: #EAD3A5;
         }
 
-        /* ---------- Subheader ---------- */
+        /* Subheader  */
         .stSubheader, h2, h3 {
-            color: #14532D !important;
+            color: #EAD3A5 !important;
             font-weight: 700 !important;
         }
 
