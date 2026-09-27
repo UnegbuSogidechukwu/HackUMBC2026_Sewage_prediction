@@ -226,7 +226,7 @@ def add_threshold(fig):
             tickfont=dict(color="#1E293B")
         ),
         
-        # --- FORCE DARK TEXT ON LEGEND ---
+        # FORCE DARK TEXT ON LEGEND 
         legend=dict(
             orientation="h",
             yanchor="bottom",
@@ -236,7 +236,7 @@ def add_threshold(fig):
             font=dict(color="#1E293B")
         ),
         
-        # --- FORCE DARK TEXT ON HOVER LABELS ---
+        # FORCE DARK TEXT ON HOVER LABELS 
         hoverlabel=dict(
             bgcolor="white",
             font_size=14,
@@ -248,14 +248,13 @@ def add_threshold(fig):
         hovermode="x unified"
     )
     return fig
-# ─────────────────────────────────────────────────────────────
+    
 # 6. TABS
-# ─────────────────────────────────────────────────────────────
 tab_actual, tab_forecast, tab_upper, tab_lower, tab_info = st.tabs(
     ["📊 Actual", "📈 Forecast", "⬆️ Upper Bound", "⬇️ Lower Bound", "ℹ️ Information"]
 )
 
-# ── Tab 1: Actual ──
+# Tab 1: Actual 
 with tab_actual:
     visible_actual = slider("actual", key="slider_actual")
     st.subheader("Actual Discharge Volume")
@@ -270,7 +269,7 @@ with tab_actual:
     ))
     st.plotly_chart(add_threshold(fig), use_container_width=True)
 
-# ── Tab 2: Forecast ──
+# Tab 2: Forecast 
 with tab_forecast:
     visible_forecast = slider("forecast", key="slider_forecast")
     st.subheader("Forecasted Discharge Volume")
@@ -284,7 +283,7 @@ with tab_forecast:
     ))
     st.plotly_chart(add_threshold(fig), use_container_width=True)
 
-# ── Tab 3: Upper Bound ──
+# Tab 3: Upper Bound 
 with tab_upper:
     visible_upper = slider("forecast", key="slider_upper")
     st.subheader("Upper Bound — yhat_upper_gallons")
@@ -298,7 +297,7 @@ with tab_upper:
     ))
     st.plotly_chart(add_threshold(fig), use_container_width=True)
 
-# ── Tab 4: Lower Bound ──
+# Tab 4: Lower Bound 
 with tab_lower:
     visible_lower = slider("forecast", key="slider_lower")
     st.subheader("Lower Bound — yhat_lower_gallons")
@@ -312,7 +311,6 @@ with tab_lower:
     ))
     st.plotly_chart(add_threshold(fig), use_container_width=True)
 
-# ── Tab 5: Information ──
 # ── Tab 5: Information ──
 with tab_info:
     st.subheader("ℹ️ About This Application")
