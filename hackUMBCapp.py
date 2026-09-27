@@ -255,6 +255,15 @@ tab_actual, tab_forecast, tab_upper, tab_lower, tab_info = st.tabs(
 with tab_actual:
     visible_actual = slider("actual", key="slider_actual")
     st.subheader("Actual Discharge Volume")
+    
+    # Metrics
+    col1, col2, col3 = st.columns(3)
+    col1.metric("Total Discharges", f"{len(visible_actual):,}")
+    col2.metric("Peak Volume", f"{visible_actual['discharge_volume_clean'].max():,.0f} gal")
+    col3.metric("Average Volume", f"{visible_actual['discharge_volume_clean'].mean():,.0f} gal")
+    
+    visible_actual = slider("actual", key="slider_actual")
+    st.subheader("Actual Discharge Volume")
     fig = go.Figure()
     fig.add_trace(go.Scatter(
         x=visible_actual['ds'],
@@ -265,20 +274,39 @@ with tab_actual:
                     line=dict(width=1, color='white'))
     ))
     st.plotly_chart(add_threshold(fig), use_container_width=True)
+    
+    # for user download
+    st.download_button(
+    label="📥 Download Actual Data as CSV",
+    data=visible_actual.to_csv(index=False).encode('utf-8'),
+    file_name='maryland_actual_discharge.csv',
+    mime='text/csv',
+)
 
 # Tab 2: Forecast 
 with tab_forecast:
-    visible_forecast = slider("forecast", key="slider_forecast")
     st.subheader("Forecasted Discharge Volume")
     fig = go.Figure()
+    
+    # Shaded confidence interval
     fig.add_trace(go.Scatter(
-        x=visible_forecast['ds'],
-        y=visible_forecast['yhat_gallons'],
-        mode='lines',
-        name='Forecast',
-        line=dict(color='#DC2626', width=2.5)
+        x=visible_forecast['ds'].tolist() + visible_forecast['ds'].tolist()[::-1],
+        y=visible_forecast['yhat_upper_gallons'].tolist() + visible_forecast['yhat_lower_gallons'].tolist()[::-1],
+        fill='toself',
+        fillcolor='rgba(220, 38, 38, 0.15)', # light red
+        line=dict(color='rgba(255,255,255,0)'),
+        hoverinfo="skip",
+        showlegend=False,
+        name='Confidence Interval'
+    ))
+    
+    # Main Forecast Line
+    fig.add_trace(go.Scatter(
+        x=visible_forecast['ds'], y=visible_forecast['yhat_gallons'],
+        mode='lines', name='Forecast', line=dict(color='#DC2626', width=2.5)
     ))
     st.plotly_chart(add_threshold(fig), use_container_width=True)
+    
 
 # Tab 3: Upper Bound 
 with tab_upper:
@@ -326,7 +354,7 @@ with tab_info:
         "The forecasts shown in this dashboard were generated using **Prophet**, an open-source "
         "forecasting procedure released by Facebook's Core Data Science team. Prophet is "
         "implemented in both R and Python and is available on CRAN and PyPI. It is designed to "
-        "handle time series data with strong seasonal effects, missing data, and outliers; all of ehich are "
+        "handle time series data with strong seasonal effects, missing data, and outliers; all of which are "
         "common characteristics of [environmental monitoring data](https://opendata.maryland.gov/Government/Reported-Sewer-Overflows-New-for-2023-/stgj-u72u/about_data)."
     )
     st.write(
