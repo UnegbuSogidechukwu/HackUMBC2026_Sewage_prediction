@@ -3,108 +3,171 @@ import pandas as pd
 import plotly.graph_objects as go
 import base64
 
-st.set_page_config(page_title="Maryland Sewage Discharge Forecast", layout="wide")
+st.set_page_config(
+    page_title="Maryland Sewage Discharge Forecast",
+    page_icon="💧",
+    layout="wide"
+)
 
-
-
+# ─────────────────────────────────────────────────────────────
+# 2. HELPER FUNCTIONS
+# ─────────────────────────────────────────────────────────────
 @st.cache_data
 def get_base64(bin_file):
+    """Encode a local image to base64 for CSS background injection."""
     with open(bin_file, "rb") as f:
         return base64.b64encode(f.read()).decode()
- 
-img_base64 = get_base64("hackumbc_background.webp")
- 
-# ------------------------------------------------------------------
-# COLOR PALETTE (Environmental Science & Sustainability)
-# ------------------------------------------------------------------
-PRIMARY = "#166534"     # Deep Green — trust, stability, conservation
-SECONDARY = "#15803d"   # Green — nature, growth, renewal
-ACCENT = "#CA8A04"      # Golden Yellow — energy, hope (used for threshold line)
-TEAL = "#1E6F74"        # Ocean Teal — water, calm, balance
-SOFT_BLUE = "#A8DADC"   # Soft Blue — clean air, clarity, peace
-BROWN = "#78716C"       # Earth Brown — soil, land, authenticity
-BG = "#F7FAF8"          # Light Background — clean, open, readable
- 
+
+# Safely load background image (falls back to a gradient if missing)
+bg_image_path = "hackumbc_background.webp"
+if os.path.exists(bg_image_path):
+    img_base64 = get_base64(bg_image_path)
+    bg_css = f'url("data:image/webp;base64,{img_base64}")'
+else:
+    bg_css = "linear-gradient(135deg, #0f172a 0%, #1e293b 100%)"
+
+# ─────────────────────────────────────────────────────────────
+# 3. GLOBAL CSS INJECTION (Glassmorphism + Modern UI)
+# ─────────────────────────────────────────────────────────────
 st.markdown(
     f"""
     <style>
-        /* Page background — your uploaded forest/lake photo */
+        /* ---------- Import Google Font ---------- */
+        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700&display=swap');
+
+        /* ---------- Global Background ---------- */
         .stApp {{
-            background-image: url("data:image/webp;base64,{img_base64}");
+            background-image: {bg_css};
             background-size: cover;
             background-position: center;
             background-attachment: fixed;
+            font-family: 'Inter', sans-serif;
         }}
- 
-        /* Header banner */
-        .header-banner {{
-            background: linear-gradient(90deg, {PRIMARY}, {SECONDARY});
-            padding: 32px;
-            border-radius: 18px;
+
+        /* ---------- Hide Streamlit Default Elements ---------- */
+        #MainMenu {{visibility: hidden;}}
+        footer {{visibility: hidden;}}
+        header {{visibility: hidden;}}
+
+        /* ---------- Header Section ---------- */
+        .header-container {{
+            background: linear-gradient(135deg, #14532D 0%, #166534 50%, #15803d 100%);
+            padding: 36px 40px;
+            border-radius: 20px;
             color: white;
-            margin-bottom: 25px;
-            box-shadow: 0 4px 12px rgba(0,0,0,0.20);
+            margin-bottom: 28px;
+            box-shadow: 0 8px 32px rgba(0,0,0,0.25);
+            backdrop-filter: blur(8px);
+            border: 1px solid rgba(255,255,255,0.1);
         }}
-        .header-banner h1 {{
-            font-size: 34px;
+
+        .header-container h1 {{
+            font-size: 2.2rem;
             font-weight: 700;
-            margin: 0 0 6px 0;
+            margin: 0 0 8px 0;
+            letter-spacing: -0.5px;
         }}
-        .header-banner p {{
-            font-size: 15px;
+
+        .header-container p {{
+            font-size: 1.05rem;
             margin: 0;
             opacity: 0.9;
+            font-weight: 400;
         }}
- 
-        /* Tabs — pill style */
-        button[data-baseweb="tab"] {{
-            font-size: 16px;
+
+        /* ---------- Glassmorphism Content Box ---------- */
+        .content-box {{
+            background: rgba(255, 255, 255, 0.82);
+            backdrop-filter: blur(14px);
+            -webkit-backdrop-filter: blur(14px);
+            padding: 24px 28px;
+            border-radius: 18px;
+            box-shadow: 0 4px 20px rgba(0,0,0,0.08);
+            border: 1px solid rgba(255,255,255,0.6);
+            margin-bottom: 22px;
+        }}
+
+        /* ---------- Tab Styling ---------- */
+        .stTabs [data-baseweb="tab-list"] {{
+            gap: 8px;
+            background: transparent;
+            padding: 6px 0;
+        }}
+
+        .stTabs [data-baseweb="tab"] {{
+            height: 48px;
+            padding: 0 22px;
+            font-size: 15px;
             font-weight: 600;
-            padding: 10px 20px;
-            border-radius: 10px;
-            background-color: rgba(255,255,255,0.7);
-            color: {PRIMARY};
-            margin-right: 6px;
-        }}
-        button[data-baseweb="tab"][aria-selected="true"] {{
-            background-color: {PRIMARY};
-            color: white;
-            box-shadow: 0 2px 6px rgba(0,0,0,0.25);
-        }}
- 
-        /* Content area behind each tab's chart — glassmorphism over the photo */
-        .stTabs [data-baseweb="tab-panel"] {{
-            background-color: rgba(255,255,255,0.90);
-            backdrop-filter: blur(10px);
-            border-radius: 16px;
-            padding: 22px;
-            box-shadow: 0 4px 14px rgba(0,0,0,0.15);
-            margin-top: 10px;
-        }}
- 
-        /* Slider label */
-        .stSlider > label {{
-            font-size: 16px;
-            font-weight: 600;
-            color: {PRIMARY};
-        }}
- 
-        /* Status boxes */
-        .status-success {{
-            background-color: #E8F5E9;
+            border-radius: 12px;
+            background-color: rgba(255,255,255,0.55);
             color: #14532D;
-            padding: 15px;
-            border-radius: 10px;
-            border-left: 6px solid {SECONDARY};
-            font-weight: 600;
+            border: 1px solid rgba(22, 101, 52, 0.15);
+            transition: all 0.25s ease;
         }}
+
+        .stTabs [data-baseweb="tab"]:hover {{
+            background-color: rgba(255,255,255,0.8);
+            border-color: rgba(22, 101, 52, 0.3);
+        }}
+
+        .stTabs [aria-selected="true"] {{
+            background: linear-gradient(135deg, #166534, #15803d) !important;
+            color: white !important;
+            border: none !important;
+            box-shadow: 0 4px 12px rgba(22, 101, 52, 0.35);
+        }}
+
+        /* ---------- Status Boxes ---------- */
+        .status-success {{
+            background: linear-gradient(135deg, #E8F5E9, #C8E6C9);
+            color: #14532D;
+            padding: 16px 20px;
+            border-radius: 14px;
+            border-left: 6px solid #15803d;
+            font-weight: 600;
+            font-size: 15px;
+            box-shadow: 0 2px 8px rgba(21, 128, 61, 0.12);
+        }}
+
         .status-error {{
-            background-color: #FEE2E2;
+            background: linear-gradient(135deg, #FEE2E2, #FECACA);
             color: #7F1D1D;
-            padding: 15px;
-            border-radius: 10px;
+            padding: 16px 20px;
+            border-radius: 14px;
             border-left: 6px solid #DC2626;
             font-weight: 600;
+            font-size: 15px;
+            box-shadow: 0 2px 8px rgba(220, 38, 38, 0.12);
+        }}
+
+        /* ---------- Slider Label ---------- */
+        .stSlider > label {{
+            font-size: 15px;
+            font-weight: 600;
+            color: #14532D;
+        }}
+
+        /* ---------- Subheader ---------- */
+        .stSubheader {{
+            color: #14532D;
+            font-weight: 700;
+            font-size: 1.3rem;
+            margin-bottom: 8px;
+        }}
+
+        /* ---------- Plotly Chart Container ---------- */
+        .stPlotlyChart {{
+            background: rgba(255,255,255,0.5);
+            border-radius: 14px;
+            padding: 8px;
+            border: 1px solid rgba(255,255,255,0.4);
+        }}
+
+        /* ---------- Caption ---------- */
+        .stCaption {{
+            color: #475569;
+            font-size: 0.9rem;
         }}
     </style>
     """,
