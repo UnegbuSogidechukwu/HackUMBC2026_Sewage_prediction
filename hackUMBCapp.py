@@ -408,61 +408,60 @@ with tab_zip:
     st.markdown(status_html, unsafe_allow_html=True)
 
     # ── 4. Show top 10 as a ranked list ──
-TOP_N = 10
-top_n = totals.head(TOP_N)
-total_statewide = totals.sum()
-
-st.markdown(
-    f"<h4 style='color:#14532D; margin-top: 24px;'>{header_label} — Top {TOP_N} Zipcodes</h4>",
-    unsafe_allow_html=True
-)
-
-for rank, (zipcode, volume) in enumerate(top_n.items(), start=1):
-    pct = (volume / total_statewide * 100) if total_statewide > 0 else 0
-    bar_color = "#166534"  # Deep green
+    TOP_N = 10
+    top_n = totals.head(TOP_N)
+    total_statewide = totals.sum()
 
     st.markdown(
-        f"""
-        <div style="
-            display: flex;
-            align-items: center;
-            background: #FFFFFF;
-            border-radius: 12px;
-            padding: 14px 20px;
-            margin-bottom: 10px;
-            box-shadow: 0 2px 8px rgba(0,0,0,0.06);
-            border-left: 6px solid {bar_color};
-        ">
-            <div style="
-                font-size: 20px;
-                font-weight: 700;
-                width: 50px;
-                text-align: center;
-                color: {bar_color};
-            ">
-                #{rank}
-            </div>
-            <div style="flex: 1; padding-left: 16px;">
-                <div style="font-size: 18px; font-weight: 700; color: #14532D;">
-                    Zipcode {zipcode}
-                </div>
-                <div style="font-size: 13px; color: #475569;">
-                    {pct:.2f}% of statewide total
-                </div>
-            </div>
-            <div style="
-                font-size: 20px;
-                font-weight: 700;
-                color: #1E293B;
-                text-align: right;
-            ">
-                {volume:,.0f} gal
-            </div>
-        </div>
-        """,
+        f"<h4 style='color:#14532D; margin-top: 24px;'>{header_label} — Top {TOP_N} Zipcodes</h4>",
         unsafe_allow_html=True
     )
-    )
+
+    for rank, (zipcode, volume) in enumerate(top_n.items(), start=1):
+        pct = (volume / total_statewide * 100) if total_statewide > 0 else 0
+        bar_color = "#166534"  # Deep green
+
+        st.markdown(
+            f"""
+            <div style="
+                display: flex;
+                align-items: center;
+                background: #FFFFFF;
+                border-radius: 12px;
+                padding: 14px 20px;
+                margin-bottom: 10px;
+                box-shadow: 0 2px 8px rgba(0,0,0,0.06);
+                border-left: 6px solid {bar_color};
+            ">
+                <div style="
+                    font-size: 20px;
+                    font-weight: 700;
+                    width: 50px;
+                    text-align: center;
+                    color: {bar_color};
+                ">
+                    #{rank}
+                </div>
+                <div style="flex: 1; padding-left: 16px;">
+                    <div style="font-size: 18px; font-weight: 700; color: #14532D;">
+                        Zipcode {zipcode}
+                    </div>
+                    <div style="font-size: 13px; color: #475569;">
+                        {pct:.2f}% of statewide total
+                    </div>
+                </div>
+                <div style="
+                    font-size: 20px;
+                    font-weight: 700;
+                    color: #1E293B;
+                    text-align: right;
+                ">
+                    {volume:,.0f} gal
+                </div>
+            </div>
+            """,
+            unsafe_allow_html=True
+        )
     # ── 5. Key metrics below the ranking ──
     st.markdown("---")
     col1, col2, col3 = st.columns(3)
