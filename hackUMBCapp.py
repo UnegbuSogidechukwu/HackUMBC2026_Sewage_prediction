@@ -142,7 +142,7 @@ st.markdown(
 # 3. DATA LOADING
 @st.cache_data
 def load_forecast():
-    return pd.read_csv("forecast2.csv", parse_dates=["ds"])
+    return pd.read_csv("forecast1.csv", parse_dates=["ds"])
 
 
 @st.cache_data
