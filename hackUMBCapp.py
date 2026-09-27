@@ -2,6 +2,14 @@ import streamlit as st
 import pandas as pd
 import plotly.graph_objects as go
 
+st.markdown("""
+<style>
+.stApp {
+    background-color: #F4F7FB;
+}
+</style>
+""", unsafe_allow_html=True)
+
 st.set_page_config(page_title="Maryland Sewage Discharge Forecast", layout="wide")
 
 @st.cache_data
@@ -35,11 +43,11 @@ def slider(source_type, key):
     else:
         df = forecast.copy()
 
-    # --- DATE RANGE BASED ON SELECTED DATA ---
+    # DATE RANGE BASED ON SELECTED DATA
     min_date = df['ds'].min()
     max_date = df['ds'].max()
 
-    # --- DATE SLIDER ---
+    # DATE SLIDER
     selected_date = st.slider(
         "Select a date",
         min_value=min_date.to_pydatetime(),
@@ -113,7 +121,7 @@ with tab_info:
         "public reporting trigger for sanitary sewer overflows."
     )
 
-# ---- Status readout (uses the Forecast tab's own slider selection) ----
+# (uses the Forecast tab's own slider selection)
 current_val = visible_forecast['yhat_gallons'].iloc[-1] if len(visible_forecast) else 0
 if current_val > THRESHOLD:
     st.error(f"Forecasted discharge ({current_val:,.0f} gal) exceeds the 10,000-gallon reporting threshold")
