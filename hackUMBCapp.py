@@ -513,7 +513,7 @@ with tab_info:
     st.write(
         "On January 19, 2026, a catastrophic collapse of a 72-inch sewer line near Cabin John, "
         "Maryland made national news. The rupture sent approximately **244 million gallons** of "
-        "raw sewage into the Potomac River over the following weeks — enough wastewater to fill "
+        "raw sewage into the Potomac River over the following weeks, enough wastewater to fill "
         "the entire D.C. Tidal Basin. Many experts called it the largest sewage spill in U.S. "
         "history. The incident prompted federal and state lawsuits against DC Water, which "
         "allegedly ignored warning signs of imminent failure for at least eight years."
@@ -532,7 +532,7 @@ with tab_info:
     st.write(
         "The overflows continued through the summer. In **July**, historic rainfall overwhelmed "
         "Baltimore's sewer system, causing more than **45 million gallons** of sewage-"
-        "contaminated stormwater to flow into the city's streams and harbor over just five days — "
+        "contaminated stormwater to flow into the city's streams and harbor over just five days, "
         "enough to fill more than 68 Olympic swimming pools. Much of the overflow was released "
         "through structured overflows that were part of the city's sewer design over a century "
         "ago. The event underscored the urgent need for the city to complete its consent decree "
