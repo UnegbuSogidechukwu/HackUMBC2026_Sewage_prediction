@@ -506,26 +506,3 @@ with img_col3:
         caption="Image from leakage",
         use_container_width=True
     )
-
-# 7. FORECAST STATUS MESSAGE
-# Use the Forecast tab's own slider selection
-current_val = visible_forecast['yhat_gallons'].iloc[-1] if len(visible_forecast) else 0
-
-if current_val > THRESHOLD:
-    st.markdown(
-        f"""
-        <div class="status-error">
-            ⚠️ Forecasted discharge ({current_val:,.0f} gal) exceeds the 10,000-gallon reporting threshold
-        </div>
-        """,
-        unsafe_allow_html=True
-    )
-else:
-    st.markdown(
-        f"""
-        <div class="status-success">
-            ✅ Forecasted discharge ({current_val:,.0f} gal) is within the 10,000-gallon reporting threshold
-        </div>
-        """,
-        unsafe_allow_html=True
-    )
