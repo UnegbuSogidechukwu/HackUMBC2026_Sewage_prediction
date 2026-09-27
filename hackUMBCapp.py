@@ -26,25 +26,30 @@ st.caption(
 
 THRESHOLD = 10_000  # gallons — COMAR 26.08.10 public reporting trigger
 
-# Slider range spans whichever file has the wider date coverage,
+def slider(type):
+{# Slider range spans whichever file has the wider date coverage,
 # so neither chart gets cut off early.
-min_date = min(forecast['ds'].min(), actual['ds'].min())
-max_date = max(forecast['ds'].max(), actual['ds'].max())
+    min_date = min(forecast['ds'].min(), type['ds'].min())
+    max_date = max(forecast['ds'].max(), type['ds'].max())
 
 
-selected_date = st.slider(
-    "Select a date",
-    min_value=min_date.to_pydatetime(),
-    max_value=max_date.to_pydatetime(),
-    value=max_date.to_pydatetime(),
-    format="YYYY-MM-DD"
-)
+    selected_date = st.slider(
+        "Select a date",
+        min_value=min_date.to_pydatetime(),
+        max_value=max_date.to_pydatetime(),
+        value=max_date.to_pydatetime(),
+        format="YYYY-MM-DD"
+    )
 
-# Filter each source independently — no merge needed since each
-# tab only ever plots one series at a time.
-visible_actual = actual[actual["ds"] <= selected_date]
-visible_forecast = forecast[forecast["ds"] <= selected_date]
-
+    # Filter each source independently — no merge needed since each
+    # tab only ever plots one series at a time.
+    if (type == actual)
+    {
+        visible_actual = actual[actual["ds"] <= selected_date]
+    else
+        visible_forecast = forecast[forecast["ds"] <= selected_date]
+    }
+}
 
 def add_threshold(fig):
     fig.add_hline(
@@ -60,6 +65,7 @@ tab_actual, tab_forecast, tab_upper, tab_lower, tab_info = st.tabs(
 )
 
 with tab_actual:
+    slider("actual")
     st.subheader("Actual Discharge Volume")
     fig = go.Figure()
     fig.add_trace(go.Scatter(
@@ -69,6 +75,7 @@ with tab_actual:
     st.plotly_chart(add_threshold(fig), use_container_width=True)
 
 with tab_forecast:
+    slider("forecast")
     st.subheader("Forecast")
     fig = go.Figure()
     fig.add_trace(go.Scatter(
@@ -78,6 +85,7 @@ with tab_forecast:
     st.plotly_chart(add_threshold(fig), use_container_width=True)
 
 with tab_upper:
+    slider("forecast")
     st.subheader("Upper Bound (yhat_upper_gallons)")
     fig = go.Figure()
     fig.add_trace(go.Scatter(
@@ -87,6 +95,7 @@ with tab_upper:
     st.plotly_chart(add_threshold(fig), use_container_width=True)
 
 with tab_lower:
+    slider("forecast")
     st.subheader("Lower Bound (yhat_lower_gallons)")
     fig = go.Figure()
     fig.add_trace(go.Scatter(
