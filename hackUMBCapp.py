@@ -61,7 +61,7 @@ st.markdown(
         /* ---------- Clean Content Box ---------- */
         .content-box,
         [data-testid="stVerticalBlock"] > div:has(> .stPlotlyChart) {
-            background: #FFFFFF !important;
+            background:#90EE90 !important;
             padding: 24px 28px;
             border-radius: 18px;
             box-shadow: 0 4px 15px rgba(0, 0, 0, 0.05);
