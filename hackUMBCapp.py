@@ -154,7 +154,7 @@ def slider(source_type, key):
     call so Streamlit doesn't collide multiple sliders with the same label."""
     df = actual if source_type == "actual" else forecast
 
-    min_date = min(forecast['ds'].min(), actual['ds'].min())
+    min_date = min(forecast['ds'].min(), forecast['ds'].min())
     max_date = max(forecast['ds'].max(), actual['ds'].max())
 
     selected_date = st.slider(
