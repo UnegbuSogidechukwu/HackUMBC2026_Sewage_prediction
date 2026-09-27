@@ -32,15 +32,15 @@ st.markdown(
         header {visibility: hidden;}
 
         /* ---------- Header Section ---------- */
-        .header-container {
-            background: linear-gradient(135deg, #14532D 0%, #166534 50%, #15803d 100%);
-            padding: 36px 40px;
-            border-radius: 20px;
-            color: white;
-            margin-bottom: 28px;
-            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.15);
-            border: 1px solid rgba(255, 255, 255, 0.1);
-        }
+        # .header-container {
+        #     background: linear-gradient(135deg, #14532D 0%, #166534 50%, #15803d 100%);
+        #     padding: 36px 40px;
+        #     border-radius: 20px;
+        #     color: white;
+        #     margin-bottom: 28px;
+        #     box-shadow: 0 8px 32px rgba(0, 0, 0, 0.15);
+        #     border: 1px solid rgba(255, 255, 255, 0.1);
+        # }
 
         .header-container h1 {
             font-size: 2.2rem;
