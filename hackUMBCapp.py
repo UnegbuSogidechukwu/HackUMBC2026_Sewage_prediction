@@ -15,7 +15,7 @@ def load_actual():
     return df
 
 forecast = load_forecast()
-actual = load_actual()
+actualm = load_actual()
 
 # Merge the two sources into one dataframe, keyed on date.
 # how="outer" keeps every date from both files, even where only one has data.
