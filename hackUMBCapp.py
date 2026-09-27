@@ -488,22 +488,22 @@ img_col1, img_col2, img_col3 = st.columns(3)
 
 with img_col1:
     st.image(
-        "https://www.knoxnews.com/gcdn/authoring/authoring-images/2026/02/17/TNKN/88718642007-Getty-Images-Potomac-Sewer-Spill-2026-02-17.jpg",
-        caption="Untreated sewage spills from the collapsed Potomac Interceptor line (Jan. 23, 2026). Photo: Leah Millis / Reuters",
+        "hack1_img3.webp",
+        caption="Image from leakage",
         use_container_width=True
     )
 
 with img_col2:
     st.image(
-        "https://www.knoxnews.com/gcdn/authoring/authoring-images/2026/02/17/TNKN/88718642007-Getty-Images-Potomac-Sewer-Spill-2026-02-17.jpg",
-        caption="Crews work to respond to the flow (Jan. 23, 2026). Photo: Leah Millis / Reuters",
+        "hack1_img1.webp",
+        caption="Image from leakage",
         use_container_width=True
     )
 
 with img_col3:
     st.image(
-        "https://www.knoxnews.com/gcdn/authoring/authoring-images/2026/02/17/TNKN/88718642007-Getty-Images-Potomac-Sewer-Spill-2026-02-17.jpg",
-        caption="Pumps and pipes divert raw sewage around the broken section (Feb. 16, 2026). Photo: Chip Somodevilla / Getty Images",
+        "hack1_img2.webp",
+        caption="Image from leakage",
         use_container_width=True
     )
 
