@@ -326,6 +326,162 @@ with tab_lower:
     ))
     st.plotly_chart(add_threshold(fig), use_container_width=True)
 
+# ── Tab 5: Zipcode Rankings ──
+with tab_zip:
+    st.subheader("🏆 Discharge Ranking by Zipcode")
+    st.caption(
+        "Cumulative sewage discharge volume aggregated by zipcode. The slider spans both "
+        "actual observations and the forecast period. Rankings beyond the last actual date "
+        "are **projected** using the statewide forecast trend."
+    )
+
+    # ── 1. Prepare zipcode data ──
+    zip_data = actual.copy()
+    zip_data['zip'] = pd.to_numeric(zip_data['zip'], errors='coerce')
+    zip_data = zip_data.dropna(subset=['zip', 'discharge_volume_clean'])
+    zip_data = zip_data[zip_data['discharge_volume_clean'] > 0]
+    zip_data['zip'] = zip_data['zip'].astype(int).astype(str)
+    zip_data['ds'] = pd.to_datetime(zip_data['ds'])
+
+    # Aggregate daily volume per zipcode
+    zip_daily = (
+        zip_data.groupby(['ds', 'zip'])['discharge_volume_clean']
+        .sum()
+        .reset_index()
+    )
+
+    # ── 2. Date slider spanning actual + forecast ──
+    min_date = zip_daily['ds'].min()
+    max_date = forecast['ds'].max()
+
+    selected_date = st.slider(
+        "Select a date to see the ranking",
+        min_value=min_date.to_pydatetime(),
+        max_value=max_date.to_pydatetime(),
+        value=min_date.to_pydatetime(),
+        format="YYYY-MM-DD",
+        key="slider_zip_ranking"
+    )
+    selected_date = pd.to_datetime(selected_date)
+
+    last_actual_date = zip_daily['ds'].max()
+    is_projected = selected_date > last_actual_date
+
+    # ── 3. Compute ranking (actual or projected) ──
+    if not is_projected:
+        # Real cumulative totals up to selected date
+        filtered = zip_daily[zip_daily['ds'] <= selected_date]
+        totals = (
+            filtered.groupby('zip')['discharge_volume_clean']
+            .sum()
+            .sort_values(ascending=False)
+        )
+        status_html = (
+            f"<div class='status-success'>📊 Showing <b>actual</b> cumulative discharge "
+            f"through <b>{selected_date.date()}</b></div>"
+        )
+        color_scale = "Reds"
+    else:
+        # Projected: use last-known zip distribution scaled by statewide forecast ratio
+        last_totals = (
+            zip_daily[zip_daily['ds'] <= last_actual_date]
+            .groupby('zip')['discharge_volume_clean']
+            .sum()
+        )
+
+        forecast_clean = forecast[['ds', 'yhat_gallons']].copy()
+        last_forecast_val = forecast_clean[
+            forecast_clean['ds'] <= last_actual_date
+        ]['yhat_gallons'].iloc[-1]
+        selected_forecast_val = forecast_clean[
+            forecast_clean['ds'] <= selected_date
+        ]['yhat_gallons'].iloc[-1]
+
+        scale = selected_forecast_val / last_forecast_val if last_forecast_val > 0 else 1
+        totals = (last_totals * scale).sort_values(ascending=False)
+
+        status_html = (
+            f"<div class='status-error'>🔮 Showing <b>projected</b> ranking for "
+            f"<b>{selected_date.date()}</b> — based on statewide forecast trend "
+            f"(scaled by {scale:.2f}×)</div>"
+        )
+        color_scale = "Purples"
+
+    st.markdown(status_html, unsafe_allow_html=True)
+
+    # ── 4. Show top N ranking as a horizontal bar chart ──
+    top_n = totals.head(15).iloc[::-1]  # reverse so highest is at the top of chart
+
+    fig = go.Figure(go.Bar(
+        x=top_n.values,
+        y=top_n.index,
+        orientation='h',
+        marker=dict(
+            color=top_n.values,
+            colorscale=color_scale,
+            showscale=False
+        ),
+        text=[f"{v:,.0f} gal" for v in top_n.values],
+        textposition='outside',
+        textfont=dict(color="#1E293B", size=12),
+        hovertemplate="<b>Zip %{y}</b><br>Total: %{x:,.0f} gallons<extra></extra>"
+    ))
+
+    fig.update_layout(
+        height=560,
+        xaxis=dict(
+            title="Total Discharge Volume (gallons)",
+            title_font=dict(color="#1E293B"),
+            tickfont=dict(color="#1E293B"),
+            gridcolor="rgba(0,0,0,0.05)"
+        ),
+        yaxis=dict(
+            title="Zipcode",
+            title_font=dict(color="#1E293B"),
+            tickfont=dict(color="#1E293B"),
+            autorange="reversed"
+        ),
+        plot_bgcolor="rgba(255,255,255,0.0)",
+        paper_bgcolor="rgba(255,255,255,0.0)",
+        font=dict(family="Inter, sans-serif", color="#1E293B"),
+        margin=dict(l=90, r=80, t=20, b=50)
+    )
+    st.plotly_chart(fig, use_container_width=True)
+
+    # ── 5. Tabular ranking summary ──
+    st.markdown("### 📋 Ranking Summary")
+
+    total_statewide = totals.sum()
+    summary_df = pd.DataFrame({
+        "Rank": range(1, len(top_n) + 1),
+        "Zipcode": top_n.index,
+        "Cumulative Discharge (gal)": top_n.values.round(0).astype(int),
+        "% of Statewide Total": (top_n.values / total_statewide * 100).round(2)
+    })
+
+    st.dataframe(
+        summary_df,
+        use_container_width=True,
+        hide_index=True,
+        column_config={
+            "Cumulative Discharge (gal)": st.column_config.NumberColumn(
+                "Cumulative Discharge (gal)", format="%d"
+            ),
+            "% of Statewide Total": st.column_config.NumberColumn(
+                "% of Statewide Total", format="%.2f%%"
+            )
+        }
+    )
+
+    # ── 6. Key metrics ──
+    col1, col2, col3 = st.columns(3)
+    col1.metric("Zipcodes Reporting", f"{len(totals):,}")
+    col2.metric("Statewide Total", f"{total_statewide:,.0f} gal")
+    col3.metric(
+        "Top Zipcode",
+        str(top_n.index[-1]),
+        f"{top_n.values[-1]:,.0f} gal"
+    )
 # Tab 5: Information 
 with tab_info:
     st.subheader("ℹ️ About This Application")
