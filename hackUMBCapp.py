@@ -432,7 +432,7 @@ with tab_info:
     st.markdown(
         """
         - **Washington Suburban Sanitary Commission [(WSSC)](https://www.wsscwater.com/customer-service/report-problem/emergency-water-and-sewer-problems):** 301-206-4001 
-        - **After hours: MDE Emergency Response 1-866-633-4686
+        - **After hours: MDE Emergency Response** 1-866-633-4686
         - **Anne Arundel County Utility Operations [(24-Hour Emergency)](https://www.aacounty.org/public-works/utilities/watersewer-emergency):** 410-222-8400
         """,
         unsafe_allow_html=True
