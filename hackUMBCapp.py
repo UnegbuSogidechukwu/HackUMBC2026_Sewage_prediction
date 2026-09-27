@@ -45,7 +45,7 @@ def slider(source_type, key):
         min_value=min_date.to_pydatetime(),
         max_value=max_date.to_pydatetime(),
         value=max_date.to_pydatetime(),
-        format="YYYY-MM-DD"
+        format="YYYY-MM-DD",
         key = key
     )
 
