@@ -172,7 +172,7 @@ with tab_actual:
     st.subheader("Actual Discharge Volume")
     fig = go.Figure()
     fig.add_trace(go.Scatter(
-        x=visible_actual['ds'], y=visible_actual['actual_gallons'],
+        x=visible_actual['ds'], y=visible_actual['discharge_volume_clean'],
         mode='markers', name='Actual', marker=dict(size=4, color='#4B6EF5')
     ))
     st.plotly_chart(add_threshold(fig), use_container_width=True)
