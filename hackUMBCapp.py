@@ -34,7 +34,7 @@ selected_date = st.slider(
     format="YYYY-MM-DD"
 )
 
-visible = forecast[forecast['ds'] <= selected_date]
+visible = df[df["ds"] <= selected_date]
 
 
 def add_threshold(fig):
@@ -58,6 +58,7 @@ with tab_actual:
         mode='markers', name='Actual', marker=dict(size=4, color='#4B6EF5')
     ))
     st.plotly_chart(add_threshold(fig), use_container_width=True)
+
 
 with tab_forecast:
     st.subheader("Forecast")
