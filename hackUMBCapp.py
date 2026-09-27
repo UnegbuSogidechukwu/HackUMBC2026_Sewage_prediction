@@ -27,8 +27,8 @@ st.caption(
 THRESHOLD = 10_000  # gallons — COMAR 26.08.10 public reporting trigger
 
 def slider(type):
-{# Slider range spans whichever file has the wider date coverage,
-# so neither chart gets cut off early.
+    {# Slider range spans whichever file has the wider date coverage,
+    # so neither chart gets cut off early.
     min_date = min(forecast['ds'].min(), type['ds'].min())
     max_date = max(forecast['ds'].max(), type['ds'].max())
 
