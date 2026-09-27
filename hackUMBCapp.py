@@ -173,11 +173,27 @@ st.caption(
 THRESHOLD = 10_000  # gallons — COMAR 26.08.10 public reporting trigger
 
 # 5. HELPER FUNCTIONS (Sliders, Threshold Line)
+# 5. HELPER FUNCTIONS (Sliders, Threshold Line)
 def slider(source_type, key):
+    """
+    Render a date slider and return the filtered dataframe.
+
+    - source_type="actual"   → slider spans only actual dates, returns actual rows.
+    - source_type="forecast" → slider spans only FUTURE dates (after the last
+                               actual date), returns forecast rows.
+    """
+    # Anchor: the last date we have real observations for
+    last_actual_date = actual['ds'].max()
+
     if source_type == "actual":
         df = actual.copy()
     else:
-        df = forecast.copy()
+        # Only keep future forecast rows (drop any historical/backcast values)
+        df = forecast[forecast['ds'] > last_actual_date].copy()
+
+    if df.empty:
+        st.warning(f"No data available for '{source_type}'.")
+        return df
 
     min_date = df['ds'].min()
     max_date = df['ds'].max()
@@ -192,7 +208,6 @@ def slider(source_type, key):
     )
 
     return df[df["ds"] <= selected_date]
-
 
 def add_threshold(fig):
     """Adds the reporting threshold line and standard layout to a Plotly figure."""
