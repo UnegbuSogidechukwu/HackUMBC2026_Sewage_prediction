@@ -336,7 +336,7 @@ with tab_info:
         "The model decomposes a time series into three main components: **trend** (non-linear "
         "growth or decline), **seasonality** (yearly, weekly, and daily patterns), and **holiday "
         "effects**. This additive approach allows the model to capture the complex, multi-scale "
-        "patterns present in sewage discharge volumes.[reference:1]"
+        "patterns present in sewage discharge volumes."
     )
     st.write(
         "For this dashboard, Prophet was trained on log-transformed weekly statewide sewage "
@@ -348,34 +348,58 @@ with tab_info:
     )
     st.markdown("---")
 
-    # ── Section 2: Maryland Sewage History ──
-    st.markdown("### 📜 Memorable Moments in Maryland Sewage History")
+    #  Section 2: Maryland Sewage History
+    st.markdown("### 📜 Unfortunate Moments in Maryland Sewage History")
     st.write(
         "Maryland has a long and complex relationship with its wastewater infrastructure. "
         "Below are some of the most significant sewage-related events that have shaped public "
         "policy and environmental awareness in the state."
     )
-
-    st.markdown("#### 🚨 January 2026 — The Potomac Interceptor Collapse")
+    st.markdown("#### January 2026 — The Potomac Interceptor Collapse")
     st.write(
         "On January 19, 2026, a catastrophic collapse of a 72-inch sewer line near Cabin John, "
         "Maryland made national news. The rupture sent approximately **244 million gallons** of "
         "raw sewage into the Potomac River over the following weeks — enough wastewater to fill "
         "the entire D.C. Tidal Basin. Many experts called it the largest sewage spill in U.S. "
         "history. The incident prompted federal and state lawsuits against DC Water, which "
-        "allegedly ignored warning signs of imminent failure for at least eight years.[reference:2][reference:3]"
+        "allegedly ignored warning signs of imminent failure for at least eight years."
     )
 
-    st.markdown("#### 🌊 August 2014 — Baltimore-Area Overflows into the Patapsco")
+    st.markdown("#### 2018 — A Year of Record Rainfall and Catastrophic Overflows")
+    st.write(
+        "2018 was one of the wettest years on record in Maryland, and the state's aging sewer "
+        "systems buckled under the pressure. In **May**, torrential rains triggered destructive "
+        "flash flooding in Ellicott City, rupturing a sewage main about two miles from downtown. "
+        "As much as **500,000 gallons** of sewage spilled, prompting Howard County officials to "
+        "issue a precautionary health alert and warn residents to stay away from affected "
+        "waterways. [The flooding also claimed the life of a National Guard member who was swept "
+        "away while trying to help a woman rescue her pet](https://www.cnn.com/2018/05/29/us/ellicott-city-maryland-flooding-missing-guardsman/)."
+    )
+    st.write(
+        "The overflows continued through the summer. In **July**, historic rainfall overwhelmed "
+        "Baltimore's sewer system, causing more than **45 million gallons** of sewage-"
+        "contaminated stormwater to flow into the city's streams and harbor over just five days — "
+        "enough to fill more than 68 Olympic swimming pools. Much of the overflow was released "
+        "through structured overflows that were part of the city's sewer design over a century "
+        "ago. The event underscored the urgent need for the city to complete its consent decree "
+        "obligations under the Clean Water Act."
+    )
+    st.write(
+        "Earlier that summer, in **June**, nearly **6 million gallons** of raw sewage poured into "
+        "Mattawoman Creek in Charles County after multiple pump failures at a local pumping "
+        "station."
+    )
+
+    st.markdown("#### August 2014 — Baltimore-Area Overflows into the Patapsco")
     st.write(
         "In August 2014, three major sanitary sewer overflows were reported in the Baltimore "
         "region during a period of near-record rainfall. The largest spill occurred at the "
         "Patapsco Wastewater Treatment Plant in Fairfield, dumping approximately **3 million "
         "gallons** of untreated, diluted wastewater into the Patapsco River. The event "
-        "highlighted the vulnerability of aging combined sewer systems to extreme weather.[reference:4]"
+        "highlighted the vulnerability of aging combined sewer systems to extreme weather."
     )
 
-    st.markdown("#### 🏛️ 2002 — Baltimore Consent Decree")
+    st.markdown("#### 2002 — Baltimore Consent Decree")
     st.write(
         "In 2002, the U.S. Justice Department sued Baltimore over chronic sewage discharges "
         "from its leaky, overloaded system. The city entered into a Consent Decree with the "
@@ -383,66 +407,42 @@ with tab_info:
         "and undertake a **$940 million** upgrade to its sewage treatment system. The decree "
         "estimated that **100 million gallons** of sewage had been discharged into the Patapsco "
         "River and its tributaries between 1996 and 2002. This marked a turning point in "
-        "Maryland's approach to wastewater infrastructure.[reference:5][reference:6]"
+        "Maryland's approach to wastewater infrastructure."
     )
     st.markdown("---")
 
-    # ── Section 3: Emergency Contacts ──
-    st.markdown("### 📞 Emergency Contacts")
+    # Section 3: Emergency Contacts 
+    st.markdown("### Emergency Contacts")
     st.write(
         "If you witness a sewage overflow, discharge, or any environmental emergency in "
         "Maryland, report it immediately using the contacts below. Early reporting helps "
         "protect public health and the environment."
     )
 
-    st.markdown("#### Maryland Department of the Environment (MDE)")
+    st.markdown("#### [Maryland Department of the Environment (MDE)](https://mde.maryland.gov/Pages/index.aspx)")
     st.markdown(
         """
-        - **24-Hour Emergency Response:** `1-866-633-4686` (toll-free)
-        - **General Information:** `1-800-633-6101`
-        - **Chesapeake Bay Safety & Environmental Hotline:** `1-877-224-7229`
-        - **Water Quality Monitoring:** `1-800-285-8195`
-        - **Water & Wastewater Emergency Line:** `1-800-669-7080`
+        - **24-Hour Emergency Response:** 1-866-633-4686
         """,
         unsafe_allow_html=True
     )
-    st.caption("Source: State of Maryland Toll-Free Numbers Directory[reference:7]")
+    st.caption("[For more details on contact](https://mde.maryland.gov/Pages/contactus.aspx)"
 
     st.markdown("#### County-Level Contacts")
     st.markdown(
         """
-        - **Washington Suburban Sanitary Commission (WSSC):** `(301) 206-8000` (business hours) | After hours: MDE Emergency Response `1-866-633-4686`
-        - **Anne Arundel County Utility Operations (24-Hour Emergency):** `410-222-8400`
-        - **Talbot County Sanitary District Emergency Line:** `1-877-469-3494`
-        - **Howard County Bureau of Utilities Customer Service:** `(410) 313-4900`
+        - **Washington Suburban Sanitary Commission [(WSSC)](https://www.wsscwater.com/customer-service/report-problem/emergency-water-and-sewer-problems):** 301-206-4001 
+        - **After hours: MDE Emergency Response `1-866-633-4686`
+        - **Anne Arundel County Utility Operations [(24-Hour Emergency)](https://www.aacounty.org/public-works/utilities/watersewer-emergency):** 410-222-8400
         """,
         unsafe_allow_html=True
     )
-    st.caption("Sources: WSSC, Anne Arundel County, Talbot County, Howard County[reference:8]")
+               
+    st.caption("Sources: WSSC, Anne Arundel County")
     st.markdown("---")
 
-    # ── Section 4: Color Palette ──
-    st.markdown("### 🎨 Color Palette Used")
-    st.markdown(
-        """
-        *Inspired by Environmental Science & Sustainability*
-
-        | Color | Hex | Role |
-        |-------|-----|------|
-        | 🟢 Deep Green | `#166534` | Primary — Trust, stability, conservation |
-        | 🌿 Green | `#15803d` | Secondary — Nature, growth, renewal |
-        | 🟡 Golden Yellow | `#CA8A04` | Accent — Energy, optimism, hope |
-        | 🔵 Ocean Teal | `#1E6F74` | Support — Water, calm, balance |
-        | 🔷 Soft Blue | `#ABDADC` | Support — Clean air, clarity, peace |
-        | 🟤 Earth Brown | `#78716C` | Neutral — Soil, land, authenticity |
-        | ⚪ Light Background | `#F7FAF8` | Clean, open, readable |
-        """
-    )
-
-
-# ─────────────────────────────────────────────────────────────
+    
 # 8. IMAGES AT THE BOTTOM OF THE PAGE
-# ─────────────────────────────────────────────────────────────
 st.markdown("---")
 st.subheader("[Potomac River Sewage Spill — January 2026](https://potomacriverkeepernetwork.org/potomac-sewage-spill-data-updates/)")
 st.caption(
