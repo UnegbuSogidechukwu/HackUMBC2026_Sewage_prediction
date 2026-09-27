@@ -46,6 +46,7 @@ def slider(source_type, key):
         max_value=max_date.to_pydatetime(),
         value=max_date.to_pydatetime(),
         format="YYYY-MM-DD"
+        key = key
     )
 
     return df[df["ds"] <= selected_date]
