@@ -10,11 +10,16 @@ def load_forecast():
 
 @st.cache_data
 def load_actual():
-    return pd.read_csv("actual.csv", parse_dates=["dates"])
+    df = pd.read_csv("actual.csv", parse_dates=["dates"])
+    df = df.rename(columns={"dates": "ds"})  # align column name with forecast.csv
+    return df
 
 forecast = load_forecast()
 actual = load_actual()
 
+# Merge the two sources into one dataframe, keyed on date.
+# how="outer" keeps every date from both files, even where only one has data.
+df = pd.merge(forecast, actual, on="ds", how="outer").sort_values("ds")
 
 st.title("Maryland Sewage Discharge — Trend & Forecast")
 st.caption(
@@ -23,9 +28,9 @@ st.caption(
     "not a Clean Air Act State Implementation Plan)."
 )
 
-THRESHOLD = 10_000  
+THRESHOLD = 10_000  # gallons — COMAR 26.08.10 public reporting trigger
 
-min_date, max_date = forecast['ds'].min(), forecast['ds'].max()
+min_date, max_date = df['ds'].min(), df['ds'].max()
 selected_date = st.slider(
     "Select a date",
     min_value=min_date.to_pydatetime(),
@@ -46,7 +51,7 @@ def add_threshold(fig):
     return fig
 
 
-tab_actual, tab_forecast, tab_upper, tab_lower, tab_all = st.tabs(
+tab_actual, tab_forecast, tab_upper, tab_lower, tab_info = st.tabs(
     ["Actual", "Forecast", "Upper Bound", "Lower Bound", "Information"]
 )
 
@@ -59,12 +64,11 @@ with tab_actual:
     ))
     st.plotly_chart(add_threshold(fig), use_container_width=True)
 
-
 with tab_forecast:
     st.subheader("Forecast")
     fig = go.Figure()
     fig.add_trace(go.Scatter(
-        x=visible['ds'], y=visible['forcasted gallons'],
+        x=visible['ds'], y=visible['yhat_gallons'],
         mode='lines', name='Forecast', line=dict(color='red')
     ))
     st.plotly_chart(add_threshold(fig), use_container_width=True)
@@ -87,9 +91,17 @@ with tab_lower:
     ))
     st.plotly_chart(add_threshold(fig), use_container_width=True)
 
+with tab_info:
+    st.subheader("About this model")
+    st.write(
+        "Forecast generated with Prophet, trained on log-transformed weekly statewide "
+        "sewage discharge volume. Threshold reflects COMAR 26.08.10's 10,000-gallon "
+        "public reporting trigger for sanitary sewer overflows."
+    )
 
 # ---- Status readout ----
-current_val = visible['yhat_gallons'].iloc[-1] if len(visible) else 0
+forecast_rows = visible.dropna(subset=['yhat_gallons'])
+current_val = forecast_rows['yhat_gallons'].iloc[-1] if len(forecast_rows) else 0
 if current_val > THRESHOLD:
     st.error(f"Forecasted discharge ({current_val:,.0f} gal) exceeds the 10,000-gallon reporting threshold")
 else:
