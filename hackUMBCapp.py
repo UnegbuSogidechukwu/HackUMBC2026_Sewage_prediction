@@ -6,11 +6,11 @@ st.set_page_config(page_title="Maryland Sewage Discharge Forecast", layout="wide
 
 @st.cache_data
 def load_forecast():
-    return pd.read_csv("forecast.csv", parse_dates=["ds"])
+    return pd.read_csv("forecast1.csv", parse_dates=["ds"])
 
 @st.cache_data
 def load_actual():
-    df = pd.read_csv("actual.csv", parse_dates=["date"])
+    df = pd.read_csv("actual1.csv", parse_dates=["date"])
     df = df.rename(columns={"date": "ds"})
     return df
 
