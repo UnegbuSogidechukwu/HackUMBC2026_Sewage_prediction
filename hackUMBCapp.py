@@ -67,7 +67,7 @@ st.markdown(
             margin-bottom: 22px;
         }
 
-        /* ---------- Tab Styling (Pills) ---------- */
+        /* Tab Styling */
         .stTabs [data-baseweb="tab-list"] {
             gap: 10px;
             background: transparent;
@@ -99,7 +99,7 @@ st.markdown(
             box-shadow: 0 4px 14px rgba(22, 101, 52, 0.3) !important;
         }
 
-        /* ---------- Status Boxes ---------- */
+        /*Status Boxes*/
         .status-success {
             background: linear-gradient(135deg, #E8F5E9, #C8E6C9);
             color: #14532D;
@@ -112,17 +112,17 @@ st.markdown(
             margin-top: 12px;
         }
 
-        .status-error {
-            background: linear-gradient(135deg, #FEE2E2, #FECACA);
-            color: #7F1D1D;
-            padding: 18px 24px;
-            border-radius: 14px;
-            border-left: 6px solid #DC2626;
-            font-weight: 600;
-            font-size: 15px;
-            box-shadow: 0 2px 10px rgba(220, 38, 38, 0.1);
-            margin-top: 12px;
-        }
+        # .status-error {
+        #     background: linear-gradient(135deg, #FEE2E2, #FECACA);
+        #     color: #7F1D1D;
+        #     padding: 18px 24px;
+        #     border-radius: 14px;
+        #     border-left: 6px solid #DC2626;
+        #     font-weight: 600;
+        #     font-size: 15px;
+        #     box-shadow: 0 2px 10px rgba(220, 38, 38, 0.1);
+        #     margin-top: 12px;
+        # }
 
         /* ---------- Slider Label ---------- */
         .stSlider > label {
