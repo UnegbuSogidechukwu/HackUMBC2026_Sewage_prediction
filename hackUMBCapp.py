@@ -6,87 +6,83 @@ import base64
 st.set_page_config(page_title="Maryland Sewage Discharge Forecast", layout="wide")
 
 
-@st.cache_data
-def get_base64(bin_file):
-    with open(bin_file, "rb") as f:
-        return base64.b64encode(f.read()).decode()
-
-img_base64 = get_base64("hackumbc_background.webp")
-
-
+PRIMARY = "#166534"     # Deep Green — trust, stability, conservation
+SECONDARY = "#15803d"   # Green — nature, growth, renewal
+ACCENT = "#CA8A04"      # Golden Yellow — energy, hope (used for threshold line)
+TEAL = "#1E6F74"        # Ocean Teal — water, calm, balance
+SOFT_BLUE = "#A8DADC"   # Soft Blue — clean air, clarity, peace
+BROWN = "#78716C"       # Earth Brown — soil, land, authenticity
+BG = "#F7FAF8"          # Light Background — clean, open, readable
+ 
 st.markdown(
     f"""
     <style>
-        /* ------------------------------
-           GLOBAL BACKGROUND
-        ------------------------------ */
+        /* Page background */
         .stApp {{
-            background-image: url("data:image/webp;base64,{img_base64}");
-            background-size: cover;
-            background-position: center;
-            background-attachment: fixed;
+            background-color: {BG};
         }}
-
-        /* ------------------------------
-           HEADER
-        ------------------------------ */
-        .header {{
-            background: linear-gradient(90deg, #14532D, #166534, #15803d);
+ 
+        /* Header banner */
+        .header-banner {{
+            background: linear-gradient(90deg, {PRIMARY}, {SECONDARY});
             padding: 32px;
             border-radius: 18px;
             color: white;
             margin-bottom: 25px;
-            box-shadow: 0 4px 12px rgba(0,0,0,0.25);
+            box-shadow: 0 4px 12px rgba(0,0,0,0.20);
         }}
-
-        .header h1 {{
-            font-size: 36px;
+        .header-banner h1 {{
+            font-size: 34px;
             font-weight: 700;
+            margin: 0 0 6px 0;
+        }}
+        .header-banner p {{
+            font-size: 15px;
             margin: 0;
+            opacity: 0.9;
         }}
-
-        /* ------------------------------
-           CONTENT BOX (Glassmorphism)
-        ------------------------------ */
-        .content-box {{
-            background: rgba(255, 255, 255, 0.85);
-            backdrop-filter: blur(12px);
-            padding: 22px;
-            border-radius: 16px;
-            box-shadow: 0 4px 14px rgba(0,0,0,0.15);
-            margin-bottom: 20px;
-        }}
-
-        /* ------------------------------
-           TABS
-        ------------------------------ */
+ 
+        /* Tabs — pill style */
         button[data-baseweb="tab"] {{
-            font-size: 17px;
+            font-size: 16px;
             font-weight: 600;
             padding: 10px 20px;
             border-radius: 10px;
-            background-color: rgba(255,255,255,0.6);
-            color: #14532D;
+            background-color: rgba(255,255,255,0.7);
+            color: {PRIMARY};
+            margin-right: 6px;
         }}
-
         button[data-baseweb="tab"][aria-selected="true"] {{
-            background-color: #166534;
+            background-color: {PRIMARY};
             color: white;
             box-shadow: 0 2px 6px rgba(0,0,0,0.25);
         }}
-
-        /* ------------------------------
-           STATUS BOXES
-        ------------------------------ */
+ 
+        /* Content area behind each tab's chart */
+        .stTabs [data-baseweb="tab-panel"] {{
+            background-color: rgba(255,255,255,0.92);
+            border-radius: 16px;
+            padding: 22px;
+            box-shadow: 0 4px 14px rgba(0,0,0,0.10);
+            margin-top: 10px;
+        }}
+ 
+        /* Slider label */
+        .stSlider > label {{
+            font-size: 16px;
+            font-weight: 600;
+            color: {PRIMARY};
+        }}
+ 
+        /* Status boxes */
         .status-success {{
             background-color: #E8F5E9;
             color: #14532D;
             padding: 15px;
             border-radius: 10px;
-            border-left: 6px solid #15803d;
+            border-left: 6px solid {SECONDARY};
             font-weight: 600;
         }}
-
         .status-error {{
             background-color: #FEE2E2;
             color: #7F1D1D;
@@ -95,20 +91,10 @@ st.markdown(
             border-left: 6px solid #DC2626;
             font-weight: 600;
         }}
-
-        /* ------------------------------
-           SLIDER LABEL FIX
-        ------------------------------ */
-        .stSlider > label {{
-            font-size: 16px;
-            font-weight: 600;
-            color: #14532D;
-        }}
     </style>
     """,
     unsafe_allow_html=True
 )
-
 
 @st.cache_data
 def load_forecast():
