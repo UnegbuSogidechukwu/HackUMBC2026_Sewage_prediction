@@ -23,6 +23,34 @@ st.markdown(
             color: white;
             margin-bottom: 20px;
         }
+        /* Content container */
+        .content-box {
+            background-color: rgba(255,255,255,0.92);
+            padding: 20px;
+            border-radius: 15px;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+        }
+        /* Tabs styling */
+        button[data-baseweb="tab] {
+            font-size: 16px;
+            font-weight: 600; 
+            border-radius: 8px;
+        }
+        button[data-baseweb="tab"][aria-selected="true"] {
+            background-color: #166534;
+            color:white;
+        }
+        /* Status message */
+        .status-success {
+            background-color: #E8F5E9;
+            color: #14532D;
+            padding: 15px;
+            border-radius: 8px;
+            border-left: 5px solid #15883D;
+        }
+    </style>
+    unsafe_allow_html = True
+)
             
 
 
