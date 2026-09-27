@@ -6,6 +6,17 @@ import base64
 st.set_page_config(page_title="Maryland Sewage Discharge Forecast", layout="wide")
 
 
+
+@st.cache_data
+def get_base64(bin_file):
+    with open(bin_file, "rb") as f:
+        return base64.b64encode(f.read()).decode()
+ 
+img_base64 = get_base64("hackumbc_background.webp")
+ 
+# ------------------------------------------------------------------
+# COLOR PALETTE (Environmental Science & Sustainability)
+# ------------------------------------------------------------------
 PRIMARY = "#166534"     # Deep Green — trust, stability, conservation
 SECONDARY = "#15803d"   # Green — nature, growth, renewal
 ACCENT = "#CA8A04"      # Golden Yellow — energy, hope (used for threshold line)
@@ -17,9 +28,12 @@ BG = "#F7FAF8"          # Light Background — clean, open, readable
 st.markdown(
     f"""
     <style>
-        /* Page background */
+        /* Page background — your uploaded forest/lake photo */
         .stApp {{
-            background-color: {BG};
+            background-image: url("data:image/webp;base64,{img_base64}");
+            background-size: cover;
+            background-position: center;
+            background-attachment: fixed;
         }}
  
         /* Header banner */
@@ -58,12 +72,13 @@ st.markdown(
             box-shadow: 0 2px 6px rgba(0,0,0,0.25);
         }}
  
-        /* Content area behind each tab's chart */
+        /* Content area behind each tab's chart — glassmorphism over the photo */
         .stTabs [data-baseweb="tab-panel"] {{
-            background-color: rgba(255,255,255,0.92);
+            background-color: rgba(255,255,255,0.90);
+            backdrop-filter: blur(10px);
             border-radius: 16px;
             padding: 22px;
-            box-shadow: 0 4px 14px rgba(0,0,0,0.10);
+            box-shadow: 0 4px 14px rgba(0,0,0,0.15);
             margin-top: 10px;
         }}
  
