@@ -1,16 +1,30 @@
 import streamlit as st
 import pandas as pd
 import plotly.graph_objects as go
-
-st.markdown("""
-<style>
-.stApp {
-    background-color: #90EE90;
-}
-</style>
-""", unsafe_allow_html=True)
+import base64
 
 st.set_page_config(page_title="Maryland Sewage Discharge Forecast", layout="wide")
+
+# page styling
+st.markdown(
+    <style>
+        /* Background-image */
+        .stApp {
+            background-image: url("data:image/jpg;base64,{img_base64};
+            background-size: cover;
+            background-position: center:
+            background-attachment:fixed;
+        }
+        /* Header section */
+        .header {
+            background: linear-gradient(90deg, #166534, #15803d);
+            padding: 30px;
+            border-radius: 15px;
+            color: white;
+            margin-bottom: 20px;
+        }
+            
+
 
 @st.cache_data
 def load_forecast():
