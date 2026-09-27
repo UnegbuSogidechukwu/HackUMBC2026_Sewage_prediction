@@ -121,15 +121,11 @@ def load_forecast():
 @st.cache_data
 def load_actual():
     df = pd.read_csv("actual.csv", parse_dates=["date"])
-    df = df.rename(columns={"date": "ds"})  # align column name with forecast.csv
+    df = df.rename(columns={"date": "ds"})
     return df
 
 forecast = load_forecast()
 actual = load_actual()
-
-# Merge the two sources into one dataframe, keyed on date.
-# how="outer" keeps every date from both files, even where only one has data.
-df = pd.merge(forecast, actual, on="ds", how="outer").sort_values("ds")
 
 st.title("Maryland Sewage Discharge — Trend & Forecast")
 st.caption(
@@ -140,7 +136,11 @@ st.caption(
 
 THRESHOLD = 10_000  # gallons — COMAR 26.08.10 public reporting trigger
 
-min_date, max_date = df['ds'].min(), df['ds'].max()
+# Slider range spans whichever file has the wider date coverage,
+# so neither chart gets cut off early.
+min_date = min(forecast['ds'].min(), actual['ds'].min())
+max_date = max(forecast['ds'].max(), actual['ds'].max())
+
 selected_date = st.slider(
     "Select a date",
     min_value=min_date.to_pydatetime(),
@@ -149,7 +149,10 @@ selected_date = st.slider(
     format="YYYY-MM-DD"
 )
 
-visible = df[df["ds"] <= selected_date]
+# Filter each source independently — no merge needed since each
+# tab only ever plots one series at a time.
+visible_actual = actual[actual["ds"] <= selected_date]
+visible_forecast = forecast[forecast["ds"] <= selected_date]
 
 
 def add_threshold(fig):
@@ -169,7 +172,7 @@ with tab_actual:
     st.subheader("Actual Discharge Volume")
     fig = go.Figure()
     fig.add_trace(go.Scatter(
-        x=visible['ds'], y=visible['actual_gallons'],
+        x=visible_actual['ds'], y=visible_actual['actual_gallons'],
         mode='markers', name='Actual', marker=dict(size=4, color='#4B6EF5')
     ))
     st.plotly_chart(add_threshold(fig), use_container_width=True)
@@ -178,7 +181,7 @@ with tab_forecast:
     st.subheader("Forecast")
     fig = go.Figure()
     fig.add_trace(go.Scatter(
-        x=visible['ds'], y=visible['yhat_gallons'],
+        x=visible_forecast['ds'], y=visible_forecast['yhat_gallons'],
         mode='lines', name='Forecast', line=dict(color='red')
     ))
     st.plotly_chart(add_threshold(fig), use_container_width=True)
@@ -187,7 +190,7 @@ with tab_upper:
     st.subheader("Upper Bound (yhat_upper_gallons)")
     fig = go.Figure()
     fig.add_trace(go.Scatter(
-        x=visible['ds'], y=visible['yhat_upper_gallons'],
+        x=visible_forecast['ds'], y=visible_forecast['yhat_upper_gallons'],
         mode='lines', name='Upper bound', line=dict(color='#B98CFF')
     ))
     st.plotly_chart(add_threshold(fig), use_container_width=True)
@@ -196,7 +199,7 @@ with tab_lower:
     st.subheader("Lower Bound (yhat_lower_gallons)")
     fig = go.Figure()
     fig.add_trace(go.Scatter(
-        x=visible['ds'], y=visible['yhat_lower_gallons'],
+        x=visible_forecast['ds'], y=visible_forecast['yhat_lower_gallons'],
         mode='lines', name='Lower bound', line=dict(color='#6FCF97')
     ))
     st.plotly_chart(add_threshold(fig), use_container_width=True)
@@ -209,9 +212,8 @@ with tab_info:
         "public reporting trigger for sanitary sewer overflows."
     )
 
-# ---- Status readout ----
-forecast_rows = visible.dropna(subset=['yhat_gallons'])
-current_val = forecast_rows['yhat_gallons'].iloc[-1] if len(forecast_rows) else 0
+# ---- Status readout (forecast-based, independent of actual.csv) ----
+current_val = visible_forecast['yhat_gallons'].iloc[-1] if len(visible_forecast) else 0
 if current_val > THRESHOLD:
     st.error(f"Forecasted discharge ({current_val:,.0f} gal) exceeds the 10,000-gallon reporting threshold")
 else:
