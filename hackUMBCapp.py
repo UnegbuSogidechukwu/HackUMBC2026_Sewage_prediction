@@ -344,17 +344,119 @@ with tab_lower:
     st.plotly_chart(add_threshold(fig), use_container_width=True)
 
 # ── Tab 5: Information ──
+# ── Tab 5: Information ──
 with tab_info:
-    st.subheader("About this model")
+    st.subheader("ℹ️ About This Application")
     st.write(
-        "Forecast generated with **Prophet**, trained on log-transformed weekly statewide "
-        "sewage discharge volume. The threshold reflects **COMAR 26.08.10**'s 10,000-gallon "
-        "public reporting trigger for sanitary sewer overflows."
+        "This application is an interactive dashboard for exploring historical sewage discharge "
+        "volumes in Maryland and viewing short-term forecasts. It is designed to help the public, "
+        "researchers, and policymakers better understand patterns in wastewater overflows and the "
+        "risks they pose to water quality."
     )
     st.markdown("---")
+
+    # ── Section 1: Model ──
+    st.markdown("### 📈 About the Forecast Model (Prophet)")
+    st.write(
+        "The forecasts shown in this dashboard were generated using **Prophet**, an open-source "
+        "forecasting procedure released by Facebook's Core Data Science team. Prophet is "
+        "implemented in both R and Python and is available on CRAN and PyPI. It is designed to "
+        "handle time series data with strong seasonal effects, missing data, and outliers — all "
+        "common characteristics of environmental monitoring data.[reference:0]"
+    )
+    st.write(
+        "The model decomposes a time series into three main components: **trend** (non-linear "
+        "growth or decline), **seasonality** (yearly, weekly, and daily patterns), and **holiday "
+        "effects**. This additive approach allows the model to capture the complex, multi-scale "
+        "patterns present in sewage discharge volumes.[reference:1]"
+    )
+    st.write(
+        "For this dashboard, Prophet was trained on log-transformed weekly statewide sewage "
+        "discharge volume data. The log transformation helps stabilize the variance and "
+        "normalizes the distribution of the data, which improves forecast accuracy. The model "
+        "outputs point forecasts (`yhat_gallons`) along with uncertainty intervals "
+        "(`yhat_upper_gallons` and `yhat_lower_gallons`), which are visualized in the **Forecast**, "
+        "**Upper Bound**, and **Lower Bound** tabs."
+    )
+    st.markdown("---")
+
+    # ── Section 2: Maryland Sewage History ──
+    st.markdown("### 📜 Memorable Moments in Maryland Sewage History")
+    st.write(
+        "Maryland has a long and complex relationship with its wastewater infrastructure. "
+        "Below are some of the most significant sewage-related events that have shaped public "
+        "policy and environmental awareness in the state."
+    )
+
+    st.markdown("#### 🚨 January 2026 — The Potomac Interceptor Collapse")
+    st.write(
+        "On January 19, 2026, a catastrophic collapse of a 72-inch sewer line near Cabin John, "
+        "Maryland made national news. The rupture sent approximately **244 million gallons** of "
+        "raw sewage into the Potomac River over the following weeks — enough wastewater to fill "
+        "the entire D.C. Tidal Basin. Many experts called it the largest sewage spill in U.S. "
+        "history. The incident prompted federal and state lawsuits against DC Water, which "
+        "allegedly ignored warning signs of imminent failure for at least eight years.[reference:2][reference:3]"
+    )
+
+    st.markdown("#### 🌊 August 2014 — Baltimore-Area Overflows into the Patapsco")
+    st.write(
+        "In August 2014, three major sanitary sewer overflows were reported in the Baltimore "
+        "region during a period of near-record rainfall. The largest spill occurred at the "
+        "Patapsco Wastewater Treatment Plant in Fairfield, dumping approximately **3 million "
+        "gallons** of untreated, diluted wastewater into the Patapsco River. The event "
+        "highlighted the vulnerability of aging combined sewer systems to extreme weather.[reference:4]"
+    )
+
+    st.markdown("#### 🏛️ 2002 — Baltimore Consent Decree")
+    st.write(
+        "In 2002, the U.S. Justice Department sued Baltimore over chronic sewage discharges "
+        "from its leaky, overloaded system. The city entered into a Consent Decree with the "
+        "EPA and the Maryland Department of the Environment (MDE), pledging to end overflows "
+        "and undertake a **$940 million** upgrade to its sewage treatment system. The decree "
+        "estimated that **100 million gallons** of sewage had been discharged into the Patapsco "
+        "River and its tributaries between 1996 and 2002. This marked a turning point in "
+        "Maryland's approach to wastewater infrastructure.[reference:5][reference:6]"
+    )
+    st.markdown("---")
+
+    # ── Section 3: Emergency Contacts ──
+    st.markdown("### 📞 Emergency Contacts")
+    st.write(
+        "If you witness a sewage overflow, discharge, or any environmental emergency in "
+        "Maryland, report it immediately using the contacts below. Early reporting helps "
+        "protect public health and the environment."
+    )
+
+    st.markdown("#### Maryland Department of the Environment (MDE)")
     st.markdown(
         """
-        #### Color Palette Used
+        - **24-Hour Emergency Response:** `1-866-633-4686` (toll-free)
+        - **General Information:** `1-800-633-6101`
+        - **Chesapeake Bay Safety & Environmental Hotline:** `1-877-224-7229`
+        - **Water Quality Monitoring:** `1-800-285-8195`
+        - **Water & Wastewater Emergency Line:** `1-800-669-7080`
+        """,
+        unsafe_allow_html=True
+    )
+    st.caption("Source: State of Maryland Toll-Free Numbers Directory[reference:7]")
+
+    st.markdown("#### County-Level Contacts")
+    st.markdown(
+        """
+        - **Washington Suburban Sanitary Commission (WSSC):** `(301) 206-8000` (business hours) | After hours: MDE Emergency Response `1-866-633-4686`
+        - **Anne Arundel County Utility Operations (24-Hour Emergency):** `410-222-8400`
+        - **Talbot County Sanitary District Emergency Line:** `1-877-469-3494`
+        - **Howard County Bureau of Utilities Customer Service:** `(410) 313-4900`
+        """,
+        unsafe_allow_html=True
+    )
+    st.caption("Sources: WSSC, Anne Arundel County, Talbot County, Howard County[reference:8]")
+    st.markdown("---")
+
+    # ── Section 4: Color Palette ──
+    st.markdown("### 🎨 Color Palette Used")
+    st.markdown(
+        """
         *Inspired by Environmental Science & Sustainability*
 
         | Color | Hex | Role |
@@ -367,6 +469,42 @@ with tab_info:
         | 🟤 Earth Brown | `#78716C` | Neutral — Soil, land, authenticity |
         | ⚪ Light Background | `#F7FAF8` | Clean, open, readable |
         """
+    )
+
+
+# ─────────────────────────────────────────────────────────────
+# 8. IMAGES AT THE BOTTOM OF THE PAGE
+# ─────────────────────────────────────────────────────────────
+st.markdown("---")
+st.subheader("📸 Potomac River Sewage Spill — January 2026")
+st.caption(
+    "Images from the catastrophic collapse of the Potomac Interceptor sewer line near "
+    "Cabin John, Maryland. Approximately 244 million gallons of raw sewage flowed into "
+    "the Potomac River over several weeks.[reference:9]"
+)
+
+# Create a row of images with captions
+img_col1, img_col2, img_col3 = st.columns(3)
+
+with img_col1:
+    st.image(
+        "https://www.knoxnews.com/gcdn/authoring/authoring-images/2026/02/17/TNKN/88718642007-Getty-Images-Potomac-Sewer-Spill-2026-02-17.jpg",
+        caption="Untreated sewage spills from the collapsed Potomac Interceptor line (Jan. 23, 2026). Photo: Leah Millis / Reuters",
+        use_container_width=True
+    )
+
+with img_col2:
+    st.image(
+        "https://www.knoxnews.com/gcdn/authoring/authoring-images/2026/02/17/TNKN/88718642007-Getty-Images-Potomac-Sewer-Spill-2026-02-17.jpg",
+        caption="Crews work to respond to the flow (Jan. 23, 2026). Photo: Leah Millis / Reuters",
+        use_container_width=True
+    )
+
+with img_col3:
+    st.image(
+        "https://www.knoxnews.com/gcdn/authoring/authoring-images/2026/02/17/TNKN/88718642007-Getty-Images-Potomac-Sewer-Spill-2026-02-17.jpg",
+        caption="Pumps and pipes divert raw sewage around the broken section (Feb. 16, 2026). Photo: Chip Somodevilla / Getty Images",
+        use_container_width=True
     )
 
 
