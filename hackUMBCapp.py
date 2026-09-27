@@ -407,7 +407,7 @@ with tab_zip:
 
     st.markdown(status_html, unsafe_allow_html=True)
 
-    # ── 4. Show top 8 as a ranked list ──
+    # ── 4. Show top 10 as a ranked list ──
     TOP_N = 10
     top_n = totals.head(TOP_N)
     total_statewide = totals.sum()
@@ -417,22 +417,12 @@ with tab_zip:
         unsafe_allow_html=True
     )
 
-    # Medal mapping for top 3
-    medals = {1: "🥇", 2: "🥈", 3: "🥉"}
 
     for rank, (zipcode, volume) in enumerate(top_n.items(), start=1):
         pct = (volume / total_statewide * 100) if total_statewide > 0 else 0
         medal = medals.get(rank, f"#{rank}")
 
-        # Color accent for top 3
-        if rank == 1:
-            bar_color = "#F59E0B"   # Gold
-        elif rank == 2:
-            bar_color = "#94A3B8"   # Silver
-        elif rank == 3:
-            bar_color = "#B45309"   # Bronze
-        else:
-            bar_color = "#166534"   # Deep green
+        bar_color = "#166534"   # Deep green
 
         st.markdown(
             f"""
