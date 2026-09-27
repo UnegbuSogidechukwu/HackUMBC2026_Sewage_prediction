@@ -276,18 +276,6 @@ with tab_forecast:
     visible_forecast = slider("forecast", key="slider_forecast")
     st.subheader("Forecasted Discharge Volume")
     fig = go.Figure()
-    # Shaded confidence interval
-    fig.add_trace(go.Scatter(
-        x=visible_forecast['ds'].tolist() + visible_forecast['ds'].tolist()[::-1],
-        y=visible_forecast['yhat_upper_gallons'].tolist() + visible_forecast['yhat_lower_gallons'].tolist()[::-1],
-        fill='toself',
-        fillcolor='rgba(220, 38, 38, 0.15)', # light red
-        line=dict(color='rgba(255,255,255,0)'),
-        hoverinfo="skip",
-        showlegend=False,
-        name='Confidence Interval'
-    ))
-    
     # Main Forecast Line
     fig.add_trace(go.Scatter(
         x=visible_forecast['ds'], y=visible_forecast['yhat_gallons'],
