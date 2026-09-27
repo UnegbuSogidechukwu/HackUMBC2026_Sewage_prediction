@@ -273,6 +273,13 @@ with tab_actual:
 
 # Tab 2: Forecast 
 with tab_forecast:
+    # In Forecast tab, change the top line to:
+    visible_forecast = slider("forecast", key="slider_forecast")
+    visible_actual_f = actual[actual["ds"] <= visible_forecast['ds'].min()]  # actual data before forecast starts
+
+    connected_forecast, _, _ = connect_forecast_to_actual(
+    visible_actual_f, visible_forecast, 'yhat_gallons'
+    )
     visible_forecast = slider("forecast", key="slider_forecast")
     st.subheader("Forecasted Discharge Volume")
     fig = go.Figure()
