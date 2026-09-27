@@ -125,14 +125,14 @@ st.markdown(
             font-weight: 700 !important;
         }
 
-        /* ---------- Plotly Chart Container ---------- */
+        /* Plotly Chart Container */
         .stPlotlyChart {
             background: #FFFFFF;
             border-radius: 14px;
             padding: 8px;
         }
 
-        /* ---------- Caption ---------- */
+        /* Caption */
         .stCaption {
             color: #475569;
             font-size: 0.9rem;
@@ -142,10 +142,7 @@ st.markdown(
     unsafe_allow_html=True
 )
 
-
-# ─────────────────────────────────────────────────────────────
 # 3. DATA LOADING
-# ─────────────────────────────────────────────────────────────
 @st.cache_data
 def load_forecast():
     return pd.read_csv("forecast1.csv", parse_dates=["ds"])
@@ -157,13 +154,10 @@ def load_actual():
     df = df.rename(columns={"date": "ds"})
     return df
 
-
 forecast = load_forecast()
 actual = load_actual()
 
-# ─────────────────────────────────────────────────────────────
 # 4. HEADER SECTION
-# ─────────────────────────────────────────────────────────────
 st.markdown(
     """
     <div class="header-container">
@@ -181,14 +175,8 @@ st.caption(
 
 THRESHOLD = 10_000  # gallons — COMAR 26.08.10 public reporting trigger
 
-
-# ─────────────────────────────────────────────────────────────
 # 5. HELPER FUNCTIONS (Sliders, Threshold Line)
-# ─────────────────────────────────────────────────────────────
 def slider(source_type, key):
-    """Renders a date slider and returns the filtered dataframe for the
-    requested source ('actual' or 'forecast'). `key` must be unique per
-    call so Streamlit doesn't collide multiple sliders with the same label."""
     if source_type == "actual":
         df = actual.copy()
     else:
