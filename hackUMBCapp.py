@@ -31,6 +31,15 @@ THRESHOLD = 10_000  # gallons — COMAR 26.08.10 public reporting trigger
 min_date = min(forecast['ds'].min(), actual['ds'].min())
 max_date = max(forecast['ds'].max(), actual['ds'].max())
 
+
+selected_date = st.slider(
+    "Select a date",
+    min_value=min_date.to_pydatetime(),
+    max_value=max_date.to_pydatetime(),
+    value=max_date.to_pydatetime(),
+    format="YYYY-MM-DD"
+)
+
 # Filter each source independently — no merge needed since each
 # tab only ever plots one series at a time.
 visible_actual = actual[actual["ds"] <= selected_date]
