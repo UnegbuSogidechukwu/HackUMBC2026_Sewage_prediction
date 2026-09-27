@@ -237,7 +237,7 @@ def add_threshold(fig):
         line_width=2,
         annotation_text="Reporting threshold (10,000 gal)",
         annotation_position="top right",
-        annotation_font_color="#B45309"
+        annotation_font_color="#B45309" # Darker amber for readability
     )
     fig.update_layout(
         xaxis_title="Date",
@@ -245,20 +245,40 @@ def add_threshold(fig):
         height=520,
         plot_bgcolor="rgba(255,255,255,0.0)",   # transparent plot area
         paper_bgcolor="rgba(255,255,255,0.0)",  # transparent outer area
-        font=dict(family="Inter, sans-serif", color="#1E293B"),
-        margin=dict(l=40, r=20, t=30, b=40),
-        hovermode="x unified",
+        font=dict(family="Inter, sans-serif", color="#1E293B"), # Global font color
+        
+        # --- FORCE DARK TEXT ON AXES ---
+        xaxis=dict(
+            title_font=dict(color="#1E293B"),
+            tickfont=dict(color="#1E293B")
+        ),
+        yaxis=dict(
+            title_font=dict(color="#1E293B"),
+            tickfont=dict(color="#1E293B")
+        ),
+        
+        # --- FORCE DARK TEXT ON LEGEND ---
         legend=dict(
             orientation="h",
             yanchor="bottom",
             y=1.02,
             xanchor="right",
-            x=1
-        )
+            x=1,
+            font=dict(color="#1E293B")
+        ),
+        
+        # --- FORCE DARK TEXT ON HOVER LABELS ---
+        hoverlabel=dict(
+            bgcolor="white",
+            font_size=14,
+            font_family="Inter, sans-serif",
+            font_color="#1E293B"
+        ),
+        
+        margin=dict(l=40, r=20, t=30, b=40),
+        hovermode="x unified"
     )
     return fig
-
-
 # ─────────────────────────────────────────────────────────────
 # 6. TABS
 # ─────────────────────────────────────────────────────────────
