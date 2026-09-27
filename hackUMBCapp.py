@@ -426,7 +426,7 @@ with tab_info:
         """,
         unsafe_allow_html=True
     )
-    st.caption("[For more details on contact](https://mde.maryland.gov/Pages/contactus.aspx)"
+    st.caption("[For more details on contact](https://mde.maryland.gov/Pages/contactus.aspx)")
 
     st.markdown("#### County-Level Contacts")
     st.markdown(
