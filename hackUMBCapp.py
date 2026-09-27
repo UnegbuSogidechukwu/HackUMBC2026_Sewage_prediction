@@ -38,7 +38,7 @@ st.markdown(
 
         /* ---------- Header Section ---------- */
         .header-container {
-            background: linear-gradient(135deg, #14532D 0%, #166534 50%, #15803d 100%);
+            background: linear-gradient(135deg, #ECFDF5 0%, #D1FAE5 50%, #A7F3D0 100%);
             padding: 36px 40px;
             border-radius: 20px;
             color: white;
@@ -100,7 +100,7 @@ st.markdown(
         }
 
         .stTabs [aria-selected="true"] {
-            background: linear-gradient(135deg, #166534, #15803d) !important;
+            background: linear-gradient(135deg, #D1FAE5, #A7F3D0) !important;
             color: white !important;
             border: none !important;
             box-shadow: 0 4px 14px rgba(22, 101, 52, 0.3) !important;
