@@ -169,13 +169,7 @@ THRESHOLD = 10_000  # gallons — COMAR 26.08.10 public reporting trigger
 
 # 5. HELPER FUNCTIONS (Sliders, Threshold Line)
 def slider(source_type, key):
-    # """
-    # Render a date slider and return the filtered dataframe.
-
-    # - source_type="actual"   → slider spans only actual dates, returns actual rows.
-    # - source_type="forecast" → slider spans only FUTURE dates (after the last
-    #                            actual date), returns forecast rows.
-    # """
+    
     # Anchor: the last date we have real observations for
     last_actual_date = actual['ds'].max()
 
@@ -295,7 +289,7 @@ with tab_forecast:
 # Tab 3: Upper Bound 
 with tab_upper:
     visible_upper = slider("forecast", key="slider_upper")
-    st.subheader("Upper Bound — yhat_upper_gallons")
+    st.subheader("Upper Bound of model prediction")
     fig = go.Figure()
     fig.add_trace(go.Scatter(
         x=visible_upper['ds'],
@@ -309,7 +303,7 @@ with tab_upper:
 # Tab 4: Lower Bound 
 with tab_lower:
     visible_lower = slider("forecast", key="slider_lower")
-    st.subheader("Lower Bound — yhat_lower_gallons")
+    st.subheader("Lower Bound of model prediction")
     fig = go.Figure()
     fig.add_trace(go.Scatter(
         x=visible_lower['ds'],
