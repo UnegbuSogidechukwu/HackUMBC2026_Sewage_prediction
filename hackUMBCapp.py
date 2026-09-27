@@ -116,12 +116,12 @@ st.markdown(
         .stSlider > label {
             font-size: 15px;
             font-weight: 600;
-            color: #EAD3A5;
+            color: #BFB8AC;
         }
 
         /* Subheader  */
         .stSubheader, h2, h3 {
-            color: #EAD3A5 !important;
+            color: #BFB8AC !important;
             font-weight: 700 !important;
         }
 
