@@ -369,7 +369,6 @@ with tab_zip:
 
     # ── 3. Compute ranking (actual or projected) ──
     if not is_projected:
-        # Real cumulative totals up to selected date
         filtered = zip_daily[zip_daily['ds'] <= selected_date]
         totals = (
             filtered.groupby('zip')['discharge_volume_clean']
@@ -380,9 +379,8 @@ with tab_zip:
             f"<div class='status-success'>📊 Showing <b>actual</b> cumulative discharge "
             f"through <b>{selected_date.date()}</b></div>"
         )
-        color_scale = "Reds"
+        header_label = "Actual Cumulative Discharge"
     else:
-        # Projected: use last-known zip distribution scaled by statewide forecast ratio
         last_totals = (
             zip_daily[zip_daily['ds'] <= last_actual_date]
             .groupby('zip')['discharge_volume_clean']
@@ -405,82 +403,86 @@ with tab_zip:
             f"<b>{selected_date.date()}</b> — based on statewide forecast trend "
             f"(scaled by {scale:.2f}×)</div>"
         )
-        color_scale = "Purples"
+        header_label = "Projected Cumulative Discharge"
 
     st.markdown(status_html, unsafe_allow_html=True)
 
-    # ── 4. Show top N ranking as a horizontal bar chart ──
-    top_n = totals.head(15).iloc[::-1]  # reverse so highest is at the top of chart
-
-    fig = go.Figure(go.Bar(
-        x=top_n.values,
-        y=top_n.index,
-        orientation='h',
-        marker=dict(
-            color=top_n.values,
-            colorscale=color_scale,
-            showscale=False
-        ),
-        text=[f"{v:,.0f} gal" for v in top_n.values],
-        textposition='outside',
-        textfont=dict(color="#1E293B", size=12),
-        hovertemplate="<b>Zip %{y}</b><br>Total: %{x:,.0f} gallons<extra></extra>"
-    ))
-
-    fig.update_layout(
-        height=560,
-        xaxis=dict(
-            title="Total Discharge Volume (gallons)",
-            title_font=dict(color="#1E293B"),
-            tickfont=dict(color="#1E293B"),
-            gridcolor="rgba(0,0,0,0.05)"
-        ),
-        yaxis=dict(
-            title="Zipcode",
-            title_font=dict(color="#1E293B"),
-            tickfont=dict(color="#1E293B"),
-            autorange="reversed"
-        ),
-        plot_bgcolor="rgba(255,255,255,0.0)",
-        paper_bgcolor="rgba(255,255,255,0.0)",
-        font=dict(family="Inter, sans-serif", color="#1E293B"),
-        margin=dict(l=90, r=80, t=20, b=50)
-    )
-    st.plotly_chart(fig, use_container_width=True)
-
-    # ── 5. Tabular ranking summary ──
-    st.markdown("### 📋 Ranking Summary")
-
+    # ── 4. Show top 8 as a ranked list ──
+    TOP_N = 8
+    top_n = totals.head(TOP_N)
     total_statewide = totals.sum()
-    summary_df = pd.DataFrame({
-        "Rank": range(1, len(top_n) + 1),
-        "Zipcode": top_n.index,
-        "Cumulative Discharge (gal)": top_n.values.round(0).astype(int),
-        "% of Statewide Total": (top_n.values / total_statewide * 100).round(2)
-    })
 
-    st.dataframe(
-        summary_df,
-        use_container_width=True,
-        hide_index=True,
-        column_config={
-            "Cumulative Discharge (gal)": st.column_config.NumberColumn(
-                "Cumulative Discharge (gal)", format="%d"
-            ),
-            "% of Statewide Total": st.column_config.NumberColumn(
-                "% of Statewide Total", format="%.2f%%"
-            )
-        }
+    st.markdown(
+        f"<h4 style='color:#14532D; margin-top: 24px;'>{header_label} — Top {TOP_N} Zipcodes</h4>",
+        unsafe_allow_html=True
     )
 
-    # ── 6. Key metrics ──
+    # Medal mapping for top 3
+    medals = {1: "🥇", 2: "🥈", 3: "🥉"}
+
+    for rank, (zipcode, volume) in enumerate(top_n.items(), start=1):
+        pct = (volume / total_statewide * 100) if total_statewide > 0 else 0
+        medal = medals.get(rank, f"#{rank}")
+
+        # Color accent for top 3
+        if rank == 1:
+            bar_color = "#F59E0B"   # Gold
+        elif rank == 2:
+            bar_color = "#94A3B8"   # Silver
+        elif rank == 3:
+            bar_color = "#B45309"   # Bronze
+        else:
+            bar_color = "#166534"   # Deep green
+
+        st.markdown(
+            f"""
+            <div style="
+                display: flex;
+                align-items: center;
+                background: #FFFFFF;
+                border-radius: 12px;
+                padding: 14px 20px;
+                margin-bottom: 10px;
+                box-shadow: 0 2px 8px rgba(0,0,0,0.06);
+                border-left: 6px solid {bar_color};
+            ">
+                <div style="
+                    font-size: 26px;
+                    font-weight: 700;
+                    width: 60px;
+                    text-align: center;
+                    color: {bar_color};
+                ">{medal}</div>
+                <div style="flex: 1; padding-left: 16px;">
+                    <div style="font-size: 18px; font-weight: 700; color: #14532D;">
+                        Zipcode {zipcode}
+                    </div>
+                    <div style="font-size: 13px; color: #475569;">
+                        {pct:.2f}% of statewide total
+                    </div>
+                </div>
+                <div style="
+                    font-size: 20px;
+                    font-weight: 700;
+                    color: #1E293B;
+                    text-align: right;
+                ">
+                    {volume:,.0f} gal
+                </div>
+            </div>
+            """,
+            unsafe_allow_html=True
+        )
+
+    # ── 5. Key metrics below the ranking ──
+    st.markdown("---")
     col1, col2, col3 = st.columns(3)
     col1.metric("Zipcodes Reporting", f"{len(totals):,}")
     col2.metric("Statewide Total", f"{total_statewide:,.0f} gal")
     col3.metric(
         "Top Zipcode",
-        str(top_n.index[-1]),
-        f"{top_n.values[-1]:,.0f} gal"
+        str(top_n.index[0]),
+        f"{top_n.values[0]:,.0f} gal"
     )
 # Tab 5: Information 
 with tab_info:
