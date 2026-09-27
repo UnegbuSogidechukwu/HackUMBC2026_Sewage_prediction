@@ -476,11 +476,11 @@ with tab_info:
 # 8. IMAGES AT THE BOTTOM OF THE PAGE
 # ─────────────────────────────────────────────────────────────
 st.markdown("---")
-st.subheader("📸 Potomac River Sewage Spill — January 2026")
+st.subheader("[Potomac River Sewage Spill — January 2026](https://potomacriverkeepernetwork.org/potomac-sewage-spill-data-updates/)")
 st.caption(
     "Images from the catastrophic collapse of the Potomac Interceptor sewer line near "
     "Cabin John, Maryland. Approximately 244 million gallons of raw sewage flowed into "
-    "the Potomac River over several weeks.[reference:9]"
+    "the Potomac River over several weeks."
 )
 
 # Create a row of images with captions
@@ -507,10 +507,7 @@ with img_col3:
         use_container_width=True
     )
 
-
-# ─────────────────────────────────────────────────────────────
 # 7. FORECAST STATUS MESSAGE
-# ─────────────────────────────────────────────────────────────
 # Use the Forecast tab's own slider selection
 current_val = visible_forecast['yhat_gallons'].iloc[-1] if len(visible_forecast) else 0
 
