@@ -420,7 +420,6 @@ with tab_zip:
 
     for rank, (zipcode, volume) in enumerate(top_n.items(), start=1):
         pct = (volume / total_statewide * 100) if total_statewide > 0 else 0
-        medal = medals.get(rank, f"#{rank}")
 
         bar_color = "#166534"   # Deep green
 
