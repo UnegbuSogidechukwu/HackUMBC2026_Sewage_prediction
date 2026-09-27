@@ -262,7 +262,7 @@ def add_threshold(fig):
     return fig
     
 # 6. TABS
-tab_actual, tab_forecast, tab_upper, tab_lower, tab_info = st.tabs(
+tab_actual, tab_forecast, tab_upper, tab_lower, tab_zip, tab_info = st.tabs(
     ["📊 Actual", "📈 Forecast", "⬆️ Upper Bound", "⬇️ Lower Bound", "🏆 Zipcode Rankings", "ℹ️ Information"]
 )
 
