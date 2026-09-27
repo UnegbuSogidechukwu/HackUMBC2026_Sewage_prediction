@@ -5,7 +5,7 @@ import plotly.graph_objects as go
 st.markdown("""
 <style>
 .stApp {
-    background-color: light green;
+    background-color: #90EE90;
 }
 </style>
 """, unsafe_allow_html=True)
