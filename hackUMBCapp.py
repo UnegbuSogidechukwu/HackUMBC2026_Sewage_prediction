@@ -11,7 +11,7 @@ def load_forecast():
 @st.cache_data
 def load_actual():
     df = pd.read_csv("actual.csv", parse_dates=["date"])
-    df = df.rename(columns={"dates": "ds"})  # align column name with forecast.csv
+    df = df.rename(columns={"date": "ds"})  # align column name with forecast.csv
     return df
 
 forecast = load_forecast()
