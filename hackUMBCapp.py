@@ -408,7 +408,7 @@ with tab_zip:
     st.markdown(status_html, unsafe_allow_html=True)
 
     # ── 4. Show top 8 as a ranked list ──
-    TOP_N = 8
+    TOP_N = 10
     top_n = totals.head(TOP_N)
     total_statewide = totals.sum()
 
