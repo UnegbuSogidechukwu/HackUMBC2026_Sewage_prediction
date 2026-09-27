@@ -25,6 +25,11 @@ st.markdown(
             background-color: #ADD8E6 ; 
             font-family: 'Inter', sans-serif;
         }
+         /* Force standard text elements to be dark */
+        p, span, div, label, .stMarkdown {
+            color: #1E293B !important;
+        }
+
 
         /* ---------- Hide Streamlit Default Elements ---------- */
         #MainMenu {visibility: hidden;}
