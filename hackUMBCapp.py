@@ -13,9 +13,59 @@ def get_base64(bin_file):
 
 img_base64 = get_base64("hackumbc_background.webp")
 
+# st.markdown(
+#     f"""
+#     <style>
+#         .stApp {{
+#             background-image: url("data:image/webp;base64,{img_base64}");
+#             background-size: cover;
+#             background-position: center;
+#             background-attachment: fixed;
+#         }}
+
+#         .header {{
+#             background: linear-gradient(90deg, #166534, #15803d);
+#             padding: 30px;
+#             border-radius: 15px;
+#             color: white;
+#             margin-bottom: 20px;
+#         }}
+
+#         .content-box {{
+#             background-color: rgba(255,255,255,0.92);
+#             padding: 20px;
+#             border-radius: 15px;
+#             box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+#         }}
+
+#         button[data-baseweb="tab"] {{
+#             font-size: 16px;
+#             font-weight: 600;
+#             border-radius: 8px;
+#         }}
+
+#         button[data-baseweb="tab"][aria-selected="true"] {{
+#             background-color: #166534;
+#             color: white;
+#         }}
+
+#         .status-success {{
+#             background-color: #E8F5E9;
+#             color: #14532D;
+#             padding: 15px;
+#             border-radius: 8px;
+#             border-left: 5px solid #15883D;
+#         }}
+#     </style>
+#     """,
+#     unsafe_allow_html=True
+# )
 st.markdown(
     f"""
     <style>
+        /* ------------------------------
+           GLOBAL BACKGROUND
+        ------------------------------ */
         .stApp {{
             background-image: url("data:image/webp;base64,{img_base64}");
             background-size: cover;
@@ -23,38 +73,82 @@ st.markdown(
             background-attachment: fixed;
         }}
 
+        /* ------------------------------
+           HEADER
+        ------------------------------ */
         .header {{
-            background: linear-gradient(90deg, #166534, #15803d);
-            padding: 30px;
-            border-radius: 15px;
+            background: linear-gradient(90deg, #14532D, #166534, #15803d);
+            padding: 32px;
+            border-radius: 18px;
             color: white;
+            margin-bottom: 25px;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.25);
+        }}
+
+        .header h1 {{
+            font-size: 36px;
+            font-weight: 700;
+            margin: 0;
+        }}
+
+        /* ------------------------------
+           CONTENT BOX (Glassmorphism)
+        ------------------------------ */
+        .content-box {{
+            background: rgba(255, 255, 255, 0.85);
+            backdrop-filter: blur(12px);
+            padding: 22px;
+            border-radius: 16px;
+            box-shadow: 0 4px 14px rgba(0,0,0,0.15);
             margin-bottom: 20px;
         }}
 
-        .content-box {{
-            background-color: rgba(255,255,255,0.92);
-            padding: 20px;
-            border-radius: 15px;
-            box-shadow: 0 4px 12px rgba(0,0,0,0.1);
-        }}
-
+        /* ------------------------------
+           TABS
+        ------------------------------ */
         button[data-baseweb="tab"] {{
-            font-size: 16px;
+            font-size: 17px;
             font-weight: 600;
-            border-radius: 8px;
+            padding: 10px 20px;
+            border-radius: 10px;
+            background-color: rgba(255,255,255,0.6);
+            color: #14532D;
         }}
 
         button[data-baseweb="tab"][aria-selected="true"] {{
             background-color: #166534;
             color: white;
+            box-shadow: 0 2px 6px rgba(0,0,0,0.25);
         }}
 
+        /* ------------------------------
+           STATUS BOXES
+        ------------------------------ */
         .status-success {{
             background-color: #E8F5E9;
             color: #14532D;
             padding: 15px;
-            border-radius: 8px;
-            border-left: 5px solid #15883D;
+            border-radius: 10px;
+            border-left: 6px solid #15803d;
+            font-weight: 600;
+        }}
+
+        .status-error {{
+            background-color: #FEE2E2;
+            color: #7F1D1D;
+            padding: 15px;
+            border-radius: 10px;
+            border-left: 6px solid #DC2626;
+            font-weight: 600;
+        }}
+
+        /* ------------------------------
+           SLIDER LABEL FIX
+        ------------------------------ */
+        .stSlider > label {{
+            font-size: 16px;
+            font-weight: 600;
+            color: #14532D;
         }}
     </style>
     """,
